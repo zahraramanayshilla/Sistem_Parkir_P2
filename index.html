@@ -11,21 +11,7 @@
   <!-- Tailwind CDN (no build step) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    // Tailwind inline config: extend a bit for our brand look
-    tailwind.config = {
-      theme: {
-        extend: {
-          boxShadow: {
-            card: '0 8px 30px rgba(30, 64, 175, 0.12)',
-            soft: '0 4px 10px rgba(30, 64, 175, 0.06)'
-          },
-          borderRadius: {
-            xl2: '18px',
-            lg2: '14px'
-          }
-        }
-      }
-    }
+
   </script>
   <style>
     /* Only for conic + repeating gradients that Tailwind utilities can't fully express */
@@ -35,6 +21,22 @@
 
     .scanbox-bg {
       background: repeating-linear-gradient(135deg, #ffffff, #ffffff 10px, #fbfdff 10px, #fbfdff 20px);
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-slideDown {
+      animation: slideDown 0.3s ease-out;
     }
   </style>
 </head>
@@ -76,68 +78,31 @@
           <ul
             class="flex flex-col md:flex-row flex-wrap justify-center md:grid md:grid-flow-col gap-1 text-sm font-semibold">
             <li><a data-tab href="#dashboard"
-                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2">🏠
+                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
+                  class='bx bx-home-smile text-lg'></i>
                 <span>Dashboard</span></a></li>
             <li><a data-tab href="#masuk"
-                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2">📥
+                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
+                  class='bx bx-scan text-lg'></i>
                 <span>Scan Masuk</span></a></li>
             <li><a data-tab href="#keluar"
-                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2">📤
+                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
+                  class='bx bx-scan text-lg'></i>
                 <span>Scan Keluar</span></a></li>
             <li><a data-tab href="#qrgenerator"
-                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2">🔳
+                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
+                  class='bx bx-qr text-lg'></i>
                 <span>QR Mahasiswa</span></a></li>
 
             <li><a data-tab href="#pengaturan"
-                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2">⚙
+                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
+                  class='bx bx-cog text-lg'></i>
                 <span>Pengaturan</span></a></li>
           </ul>
 
         </nav>
       </div>
     </header>
-
-    <!-- Script Burger Menu -->
-<script>
-  const menuToggle = document.getElementById('menu-toggle');
-  const navMenu = document.getElementById('nav-menu');
-  const icon = menuToggle.querySelector('i');
-  let isOpen = false;
-
-  menuToggle.addEventListener('click', () => {
-    isOpen = !isOpen;
-    navMenu.classList.toggle('hidden');
-    navMenu.classList.toggle('animate-slideDown');
-
-    // Ganti ikon dari Boxicons
-    if (isOpen) {
-      icon.classList.remove('bx-menu');
-      icon.classList.add('bx-x');
-    } else {
-      icon.classList.remove('bx-x');
-      icon.classList.add('bx-menu');
-    }
-  });
-</script>
-
-    <!-- Animasi (Tambahkan di bawah, atau di file CSS Tailwind custom) -->
-    <style>
-      @keyframes slideDown {
-        from {
-          opacity: 0;
-          transform: translateY(-10px);
-        }
-
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .animate-slideDown {
-        animation: slideDown 0.3s ease-out;
-      }
-    </style>
 
     <main class="mt-4 grid gap-4">
       <!-- ============== DASHBOARD ============== -->
@@ -175,8 +140,10 @@
           </article>
         </div>
         <a data-tab href="#riwayat"
-          class="tab mt-4 px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2">🕘
+          class="tab mt-4 px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
+            class='bx bx-time text-xl'></i>
           <span>Riwayat</span></a>
+
         <article class="bg-white border border-blue-100 rounded-[18px] shadow-card mt-5">
           <div class="px-5 pt-5 pb-3 text-[13px] font-bold uppercase tracking-wide text-slate-500" id="riwayat-title">
             Riwayat
@@ -533,6 +500,41 @@
 
   <!-- Buttons (Tailwind components) -->
   <script>
+    // Tailwind inline config: extend a bit for our brand look
+    tailwind.config = {
+      theme: {
+        extend: {
+          boxShadow: {
+            card: '0 8px 30px rgba(30, 64, 175, 0.12)',
+            soft: '0 4px 10px rgba(30, 64, 175, 0.06)'
+          },
+          borderRadius: {
+            xl2: '18px',
+            lg2: '14px'
+          }
+        }
+      }
+    }
+
+    const menuToggle = document.getElementById('menu-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    const icon = menuToggle.querySelector('i');
+    let isOpen = false;
+
+    menuToggle.addEventListener('click', () => {
+      isOpen = !isOpen;
+      navMenu.classList.toggle('hidden');
+      navMenu.classList.toggle('animate-slideDown');
+
+      // Ganti ikon dari Boxicons
+      if (isOpen) {
+        icon.classList.remove('bx-menu');
+        icon.classList.add('bx-x');
+      } else {
+        icon.classList.remove('bx-x');
+        icon.classList.add('bx-menu');
+      }
+    });
     // small utility classes injection
     const style = document.createElement('style');
     style.innerHTML = `
@@ -541,10 +543,8 @@
       .tab-active { @apply bg-gradient-to-br from-blue-600 to-blue-700 text-white border-transparent shadow-lg; }
     `;
     document.head.appendChild(style);
-  </script>
 
-  <!-- Hash-based router for showing sections + active tabs -->
-  <script>
+    //Hash-based router for showing sections + active tabs
     function showView(hash) {
       const views = document.querySelectorAll('[data-view]');
       if (!hash) hash = '#dashboard';
