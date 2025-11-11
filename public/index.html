@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sistem Parkir Kampus • Tailwind + WebSocket</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0b1b3a',
+            muted: '#5b6b8b',
+          },
+          boxShadow: {
+            soft: '0 8px 30px rgba(30, 64, 175, 0.12)',
+            card: '0 4px 10px rgba(30,64,175,.06)'
+          },
+          borderRadius: {
+            xl2: '18px',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen text-ink bg-gradient-to-b from-blue-50 via-blue-50/40 to-white">
+  <div class="mx-auto max-w-6xl px-4 py-5" id="app-frame">
+    <!-- Header -->
+    <header class="sticky top-0 z-20 bg-white/90 backdrop-blur border border-blue-900/10 rounded-2xl shadow-soft px-4 py-3">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 grid place-items-center text-white font-extrabold shadow-[inset_0_0_0_6px_#fff]">P</div>
+          <div>
+            <h1 class="text-base sm:text-lg font-semibold tracking-tight">KampusParkir • Sistem QR</h1>
+            <p class="text-[12px] text-muted">Pengelolaan parkir kampus cepat, aman, terintegrasi.</p>
+          </div>
+        </div>
+        <nav class="bg-blue-50 border border-blue-900/10 rounded-full p-1" aria-label="Navigasi Halaman">
+          <ul class="flex flex-wrap items-center gap-1 text-sm font-semibold" id="top-tabs">
+            <li><a href="#dashboard" class="tab-link inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-blue-900/80 hover:bg-white hover:shadow">🏠 <span class="hidden sm:inline">Dashboard</span></a></li>
+            <li><a href="#masuk" class="tab-link inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-blue-900/80 hover:bg-white hover:shadow">📥 <span class="hidden sm:inline">Scan Masuk</span></a></li>
+            <li><a href="#keluar" class="tab-link inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-blue-900/80 hover:bg-white hover:shadow">📤 <span class="hidden sm:inline">Scan Keluar</span></a></li>
+            <li><a href="#qrgenerator" class="tab-link inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-blue-900/80 hover:bg-white hover:shadow">🔳 <span class="hidden sm:inline">QR Mahasiswa</span></a></li>
+            <li><a href="#riwayat" class="tab-link inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-blue-900/80 hover:bg-white hover:shadow">🕘 <span class="hidden sm:inline">Riwayat</span></a></li>
+            <li><a href="#pengaturan" class="tab-link inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-blue-900/80 hover:bg-white hover:shadow">⚙️ <span class="hidden sm:inline">Pengaturan</span></a></li>
+          </ul>
+        </nav>
+      </div>
+      <!-- Banner status WS -->
+      <div id="ws-banner" class="hidden mt-3 text-xs px-3 py-2 rounded-lg border bg-yellow-50 border-yellow-300 text-yellow-800">
+        Menghubungkan ke server…
+      </div>
+    </header>
+
+    <main class="mt-4 grid gap-4">
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="view">
+        <div class="grid grid-cols-12 gap-3">
+          <div class="col-span-12 sm:col-span-6 lg:col-span-3 bg-white rounded-2xl border border-blue-900/10 p-4 shadow-soft">
+            <div class="text-[12px] uppercase tracking-wide font-bold text-muted">Total Slot</div>
+            <div id="stat-total" class="text-3xl font-extrabold text-blue-900 mt-1">250</div>
+            <p class="text-sm text-muted">Semua area & gedung</p>
+          </div>
+          <div class="col-span-12 sm:col-span-6 lg:col-span-3 bg-white rounded-2xl border border-blue-900/10 p-4 shadow-soft">
+            <div class="text-[12px] uppercase tracking-wide font-bold text-muted">Tersedia</div>
+            <div id="stat-available" class="text-3xl font-extrabold text-blue-900 mt-1">178</div>
+            <div class="inline-flex items-center gap-2 text-xs font-bold mt-1 px-2.5 py-1 rounded-full bg-green-50 border border-green-200 text-green-800">
+              <span class="w-2.5 h-2.5 rounded-full bg-green-600 ring-4 ring-green-600/20"></span>
+              Tingkat ketersediaan tinggi
+            </div>
+          </div>
+          <div class="col-span-12 sm:col-span-6 lg:col-span-3 bg-white rounded-2xl border border-blue-900/10 p-4 shadow-soft">
+            <div class="text-[12px] uppercase tracking-wide font-bold text-muted">Terpakai</div>
+            <div id="stat-used" class="text-3xl font-extrabold text-blue-900 mt-1">72</div>
+            <p class="text-sm text-muted">Update ± 1 menit lalu</p>
+          </div>
+          <div class="col-span-12 sm:col-span-6 lg:col-span-3 bg-white rounded-2xl border border-blue-900/10 p-4 shadow-soft">
+            <div class="text-[12px] uppercase tracking-wide font-bold text-muted">Rata-rata Durasi</div>
+            <div id="stat-avg" class="text-3xl font-extrabold text-blue-900 mt-1">1j 42m</div>
+            <p class="text-sm text-muted">Kendaraan parkir hari ini</p>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-5 gap-4 mt-3">
+          <div class="lg:col-span-3 bg-white rounded-2xl border border-blue-900/10 p-4 shadow-soft">
+            <div class="text-[12px] uppercase tracking-wide font-bold text-muted mb-2">Peta Slot Parkir</div>
+            <div class="flex flex-wrap items-center gap-2 text-xs text-muted mb-3">
+              <span class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border bg-white"><span class="w-2.5 h-2.5 rounded-full bg-green-600 ring-4 ring-green-600/20"></span> Tersedia</span>
+              <span class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border bg-white"><span class="w-2.5 h-2.5 rounded-full bg-red-600 ring-4 ring-red-600/20"></span> Terpakai</span>
+              <span class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border bg-white"><span class="w-2.5 h-2.5 rounded-full bg-blue-600 ring-4 ring-blue-600/20"></span> Reservasi</span>
+            </div>
+            <div id="lot" class="grid gap-2 sm:gap-3 grid-cols-[repeat(auto-fill,minmax(96px,1fr))]" role="list" aria-label="Daftar Slot Parkir">
+              <!-- diisi JS -->
+            </div>
+          </div>
+
+          <div class="lg:col-span-2 bg-white rounded-2xl border border-blue-900/10 p-4 shadow-soft">
+            <div class="text-[12px] uppercase tracking-wide font-bold text-muted mb-2">Aksi Cepat</div>
+            <div class="flex flex-wrap gap-2">
+              <a class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-white bg-gradient-to-br from-blue-600 to-blue-700 shadow-soft hover:shadow-lg" href="#masuk">📥 Scan Masuk</a>
+              <a class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-white bg-gradient-to-br from-blue-600 to-blue-700 shadow-soft hover:shadow-lg" href="#keluar">📤 Scan Keluar</a>
+              <a class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold border border-blue-200 text-blue-900 bg-white shadow hover:shadow-lg" href="#qrgenerator">🔳 QR Mahasiswa</a>
+            </div>
+            <p class="text-sm text-muted mt-3">Gunakan tombol di atas untuk navigasi ke fitur utama.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- MASUK -->
+      <section id="masuk" class="view">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-white rounded-2xl border border-blue-900/10 p-4 shadow-soft">
+            <div class="text-[12px] uppercase tracking-wide font-bold text-muted mb-3">Scan QR — Gerbang Masuk</div>
+            <div class="grid place-items-center text-center aspect-[16/10] rounded-2xl border-2 border-dashed border-blue-300 bg-[repeating-linear-gradient(135deg,#fff,#fff_10px,#fbfdff_10px,#fbfdff_20px)] relative overflow-hidden">
+              <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,transparent_0_10%,rgba(59,130,246,.08)_40%,rgba(59,130,246,.08)_60%,transparent_90%)] mix-blend-multiply"></div>
+              <div class="px-4">
+                <svg aria-hidden="true" width="70" height="70" viewBox="0 0 24 24" fill="none" class="mx-auto mb-2">
+                  <path d="M4 7V6a2 2 0 0 1 2-2h1" stroke="#1e40af" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M4 17v1a2 2 0 0 0 2 2h1" stroke="#1e40af" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M18 4h1a2 2 0 0 1 2 2v1" stroke="#1e40af" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M20 17v1a2 2 0 0 1-2 2h-1" stroke="#1e40af" stroke-width="2" stroke-linecap="round"/>
+                  <rect x="7" y="7" width="10" height="10" rx="2" stroke="#2563eb" stroke-width="2"/>
+                  <rect x="9.5" y="9.5" width="5" height="5" rx="1" fill="#3b82f6"/>
+                </svg>
+                <h2 class="text-2xl font-bold">Arahkan QR KTM ke Kamera</h2>
+                <p class="max-w-prose text-sm text-muted mt-1">UI saja (HTML). Integrasi kamera & pembacaan QR akan ditambahkan kemudian. Pastikan QR KTM terlihat jelas dan berada di dalam kotak.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-blue-900/10 p-4 shadow-soft">
+            <div class="text-[12px] uppercase tracking-wide font-bold text-muted mb-3">Detail Kendaraan (Opsional)</div>
+            <div class="grid gap-3 md:grid-cols-2">
+              <div>
+                <label class="block text-[13px] font-bold text-blue-900" for="npm">NPM / ID Pengguna</label>
+                <input id="npm" type="text" placeholder="Contoh: 21.11.1234" class="mt-1 w-full px-3 py-2 rounded-xl border border-blue-200 shadow-inner focus:outline-none focus:ring-4 focus:ring-blue-500/35" />
+              </div>
+              <div>
+                <label class="block text-[13px] font-bold text-blue-900" for="plat">Nomor Polisi</label>
+                <input id="plat" type="text" placeholder="D 1234 GIL" class="mt-1 w-full px-3 py-2 rounded-xl border border-blue-200 shadow-inner focus:outline-none focus:ring-4 focus:ring-blue-500/35" />
+              </div>
+              <div>
+                <label class="block text-[13px] font-bold text-blue-900" for="jenis">Jenis Kendaraan</label>
+                <select id="jenis" class="mt-1 w-full px-3 py-2 rounded-xl border border-blue-200 shadow-inner focus:outline-none focus:ring-4 focus:ring-blue-500/35">
+                  <option>Motor</option>
+                  <option>Mobil</option>
+                  <option>Lainnya</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[13px] font-bold text-blue-900" for="area">Area Parkir</label>
+                <select id="area" class="mt-1 w-full px-3 py-2 rounded-xl border border-blue-200 shadow-inner focus:outline-none focus:ring-4 focus:ring-blue-500/35">
+                  <option>Gerbang Utama</option>
+                  <option>Gedung A</option>
+                  <option>Gedung B</option>
+                  <option>Basement</option>
+                </select>
+              </div>
+            </div>
+            <div class="mt-4 flex gap-2">
+              <button type="button" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-white bg-gradient-to-br from-blue-600 to-blue-700 shadow-soft hover:shadow-lg">Simpan Masuk</button>
+              <a href="#dashboard" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold border border-blue-200 text-blue-900 bg-white shadow hover:shadow-lg">Kembali ke Dashboard</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- KELUAR -->
+      <section id="keluar" class="view">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-white rounded-2xl border border-blue-900/10 p-4 shadow-soft">
+            <div class="text-[12px] uppercase tracking-wide font-bold text-muted mb-3">Scan QR — Gerbang Keluar</div>
+            <div class="grid place-items-center text-center aspect-[16/10] rounded-2xl border-2 border-dashed border-blue-300 bg-[repeating-linear-gradient(135deg,#fff,#fff_10px,#fbfdff_10px,#fbfdff_20px)] relative overflow-hidden">
+              <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,transparent_0_10%,rgba(59,130,246,.08)_40%,rgba(59,130,246,.08)_60%,transparent_90%)] mix-blend-multiply"></div>
+              <div class="px-4">
+                <svg aria-hidden="true" width="70" height="70" viewBox="0 0 24 24" fill="none" class="mx-auto mb-2">
+                  <path d="M4 7V6a2 2 0 0 1 2-2h1" stroke="#1e40af" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M4 17v1a2 2 0 0 0 2 2h1" stroke="#1e40af" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M18 4h1a2 2 0 0 1 2 2v1" stroke="#1e40af" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M20 17v1a2 2 0 0 1-2 2h-1" stroke="#1e40af" stroke-width="2" stroke-linecap="round"/>
+                  <rect x="7" y="7" width="10" height="10" rx="2" stroke="#2563eb" stroke-width="2"/>
+                  <path d="M9 12h6" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <h2 class="text-2xl font-bold">Pindai QR untuk Keluar</h2>
+                <p class="max-w-prose text-sm text-muted mt-1">Setelah integrasi, sistem akan menghitung durasi & biaya (jika ada) secara otomatis.</p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-2xl border border-blue-900/10 p-4 shadow-soft">
+            <div class="text-[12px] uppercase tracking-wide font-bold text-muted mb-3">Ringkasan</div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <div class="text-sm text-muted">Waktu Masuk</div>
+                <div id="sum-in" class="text-2xl font-bold">—</div>
+              </div>
+              <div>
+                <div class="text-sm text-muted">Durasi</div>
+                <div id="sum-duration" class="text-2xl font-bold">—</div>
+              </div>
+            </div>
+            <div class="mt-4 flex gap-2">
+              <button type="button" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-white bg-gradient-to-br from-blue-600 to-blue-700 shadow-soft hover:shadow-lg">Selesaikan Keluar</button>
+              <a href="#dashboard" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold border border-blue-200 text-blue-900 bg-white shadow hover:shadow-lg">Kembali</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- QR GENERATOR -->
+      <section id="qrgenerator" class="view">
+        <div class="grid lg:grid-cols-5 gap-4">
+          <div class="lg:col-span-2 bg-white rounded-2xl border border-blue-900/10 p-4 shadow-soft grid place-items-center text-center gap-3">
+            <div class="text-[12px] uppercase tracking-wide font-bold text-muted">QR KTM — Pratinjau</div>
+            <div class="w-[168px] h-[168px] bg-white rounded-xl border border-blue-100 shadow-soft p-2 grid place-items-center">
+              <!-- Dummy QR -->
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                <rect width="120" height="120" fill="#fff"/>
+                <rect x="8" y="8" width="28" height="28" fill="#000"/>
+                <rect x="84" y="8" width="28" height="28" fill="#000"/>
+                <rect x="8" y="84" width="28" height="28" fill="#000"/>
+                <rect x="44" y="44" width="10" height="10" fill="#000"/>
+                <rect x="58" y="44" width="6" height="6" fill="#000"/>
+                <rect x="70" y="44" width="12" height="12" fill="#000"/>
+                <rect x="44" y="60" width="6" height="6" fill="#000"/>
+                <rect x="54" y="60" width="10" height="10" fill="#000"/>
+                <rect x="68" y="60" width="6" height="6" fill="#000"/>
+                <rect x="80" y="60" width="10" height="10" fill="#000"/>
+                <rect x="44" y="76" width="12" height="12" fill="#000"/>
+                <rect x="60" y="76" width="6" height="6" fill="#000"/>
+                <rect x="70" y="76" width="10" height="10" fill="#000"/>
+              </svg>
+            </div>
+            <p class="text-sm text-muted">Contoh pratinjau QR. Nantinya digenerate dari NPM/ID.</p>
+            <div class="flex flex-wrap gap-2">
+              <button class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-white bg-gradient-to-br from-blue-600 to-blue-700 shadow-soft hover:shadow-lg" type="button">Unduh QR</button>
+              <a class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold border border-blue-200 text-blue-900 bg-white shadow hover:shadow-lg" href="#masuk">Gunakan untuk Masuk</a>
+            </div>
+          </div>
+
+          <div class="lg:col-span-3 bg-white rounded-2xl border border-blue-900/10 p-4 shadow-soft">
+            <div class="text-[12px] uppercase tracking-wide font-bold text-muted mb-3">Buat QR untuk Mahasiswa</div>
+            <div class="grid gap-3 md:grid-cols-2">
+              <div>
+                <label class="block text-[13px] font-bold text-blue-900" for="npm2">NPM / ID</label>
+                <input id="npm2" type="text" placeholder="Masukkan NPM" class="mt-1 w-full px-3 py-2 rounded-xl border border-blue-200 shadow-inner focus:outline-none focus:ring-4 focus:ring-blue-500/35" />
+              </div>
+              <div>
+                <label class="block text-[13px] font-bold text-blue-900" for="nama">Nama</label>
+                <input id="nama" type="text" placeholder="Nama lengkap" class="mt-1 w-full px-3 py-2 rounded-xl border border-blue-200 shadow-inner focus:outline-none focus:ring-4 focus:ring-blue-500/35" />
+              </div>
+              <div>
+                <label class="block text-[13px] font-bold text-blue-900" for="role">Kategori</label>
+                <select id="role" class="mt-1 w-full px-3 py-2 rounded-xl border border-blue-200 shadow-inner focus:outline-none focus:ring-4 focus:ring-blue-500/35">
+                  <option>Mahasiswa</option>
+                  <option>Dosen</option>
+                  <option>Staff</option>
+                  <option>Tamu</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[13px] font-bold text-blue-900" for="expired">Masa Berlaku</label>
+                <select id="expired" class="mt-1 w-full px-3 py-2 rounded-xl border border-blue-200 shadow-inner focus:outline-none focus:ring-4 focus:ring-blue-500/35">
+                  <option>Tak terbatas</option>
+                  <option>1 Semester</option>
+                  <option>1 Tahun</option>
+                </select>
+              </div>
+            </div>
+            <div class="mt-4 flex gap-2">
+              <button class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-white bg-gradient-to-br from-blue-600 to-blue-700 shadow-soft hover:shadow-lg" type="button">Generate QR</button>
+              <a class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold border border-blue-200 text-blue-900 bg-white shadow hover:shadow-lg" href="#dashboard">Kembali</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIWAYAT -->
+      <section id="riwayat" class="view">
+        <div class="bg-white rounded-2xl border border-blue-900/10 p-4 shadow-soft">
+          <div class="text-[12px] uppercase tracking-wide font-bold text-muted mb-3">Riwayat Hari Ini</div>
+          <div class="overflow-auto rounded-xl border border-blue-900/10 shadow-soft">
+            <table class="w-full">
+              <thead class="bg-gradient-to-b from-blue-50 to-white text-blue-900 text-left text-[13px]">
+                <tr>
+                  <th class="p-3 sticky top-0">Waktu</th>
+                  <th class="p-3 sticky top-0">Jenis</th>
+                  <th class="p-3 sticky top-0">NPM / ID</th>
+                  <th class="p-3 sticky top-0">Nomor Polisi</th>
+                  <th class="p-3 sticky top-0">Area</th>
+                  <th class="p-3 sticky top-0">Durasi</th>
+                </tr>
+              </thead>
+              <tbody id="history-body" class="text-[14px]">
+                <!-- diisi JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- PENGATURAN -->
+      <section id="pengaturan" class="view">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-white rounded-2xl border border-blue-900/10 p-4 shadow-soft">
+            <div class="text-[12px] uppercase tracking-wide font-bold text-muted mb-3">Pengaturan Sistem</div>
+            <div class="grid gap-3 md:grid-cols-2">
+              <div>
+                <label class="block text-[13px] font-bold text-blue-900" for="slot">Jumlah Slot Total</label>
+                <input id="slot" type="number" placeholder="Mis. 250" class="mt-1 w-full px-3 py-2 rounded-xl border border-blue-200 shadow-inner focus:outline-none focus:ring-4 focus:ring-blue-500/35" />
+              </div>
+              <div>
+                <label class="block text-[13px] font-bold text-blue-900" for="gate">Nama Gerbang</label>
+                <input id="gate" type="text" placeholder="Gerbang Utama" class="mt-1 w-full px-3 py-2 rounded-xl border border-blue-200 shadow-inner focus:outline-none focus:ring-4 focus:ring-blue-500/35" />
+              </div>
+              <div>
+                <label class="block text-[13px] font-bold text-blue-900" for="tarif">Tarif (opsional)</label>
+                <input id="tarif" type="text" placeholder="Contoh: 2000/jam" class="mt-1 w-full px-3 py-2 rounded-xl border border-blue-200 shadow-inner focus:outline-none focus:ring-4 focus:ring-blue-500/35" />
+              </div>
+              <div>
+                <label class="block text-[13px] font-bold text-blue-900" for="notif">Notifikasi</label>
+                <select id="notif" class="mt-1 w-full px-3 py-2 rounded-xl border border-blue-200 shadow-inner focus:outline-none focus:ring-4 focus:ring-blue-500/35">
+                  <option>Nonaktif</option>
+                  <option>Aktif — Email</option>
+                  <option>Aktif — WhatsApp</option>
+                </select>
+              </div>
+            </div>
+            <div class="mt-4 flex gap-2">
+              <button class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-white bg-gradient-to-br from-blue-600 to-blue-700 shadow-soft hover:shadow-lg" type="button">Simpan Pengaturan</button>
+              <a href="#dashboard" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold border border-blue-200 text-blue-900 bg-white shadow hover:shadow-lg">Kembali</a>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-blue-900/10 p-4 shadow-soft">
+            <div class="text-[12px] uppercase tracking-wide font-bold text-muted mb-3">Informasi</div>
+            <p class="text-sm text-muted">informasi tentang sistem parkir saja</p>
+            <ul class="mt-2 list-disc pl-6 text-muted text-sm">
+              <li>pasipurasipapasipaga</li>
+              <li>uiauuiauiaauuia</li>
+              <li>ahihihihihi</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="text-center text-sm text-muted py-10">© 2025 Kampus Parkir</footer>
+  </div>
+
+  <script>
+    // ===== Router (hash) + Active Tab =====
+    const views = Array.from(document.querySelectorAll('.view'));
+    const links = Array.from(document.querySelectorAll('.tab-link'));
+    function show(hash){
+      const id = (hash || '#dashboard').replace('#','');
+      views.forEach(v=>v.classList.toggle('hidden', v.id!==id));
+      links.forEach(a=>{
+        const active = a.getAttribute('href') === '#'+id;
+        a.classList.toggle('bg-gradient-to-br', active);
+        a.classList.toggle('from-blue-600', active);
+        a.classList.toggle('to-blue-700', active);
+        a.classList.toggle('text-white', active);
+        a.classList.toggle('shadow', active);
+        a.classList.toggle('text-blue-900/80', !active);
+      });
+    }
+    window.addEventListener('hashchange', ()=>show(location.hash));
+    show(location.hash);
+
+    // ===== Helpers render =====
+    const el = sel => document.querySelector(sel);
+    function updateStats(stats){
+      if(!stats) return;
+      if(stats.total!=null) el('#stat-total').textContent = stats.total;
+      if(stats.available!=null) el('#stat-available').textContent = stats.available;
+      if(stats.used!=null) el('#stat-used').textContent = stats.used;
+      if(stats.avgDuration!=null) el('#stat-avg').textContent = stats.avgDuration;
+    }
+    function statusBadgeCls(s){
+      if(s==='free') return 'border border-green-300 bg-white';
+      if(s==='busy') return 'border border-red-300 bg-white';
+      if(s==='reserved') return 'border border-blue-300 bg-white';
+      return 'border bg-white';
+    }
+    function updateSlots(slots){
+      if(!Array.isArray(slots)) return;
+      const wrap = el('#lot');
+      if(!wrap) return;
+      wrap.innerHTML = '';
+      for(const slot of slots){
+        const item = document.createElement('div');
+        item.setAttribute('role','listitem');
+        item.className = `p-3 rounded-xl ${statusBadgeCls(slot.status)} shadow-card`;
+        item.innerHTML = `
+          <div class="text-lg font-extrabold text-blue-900">${slot.id}</div>
+          <div class="text-xs text-muted">${slot.meta||''}</div>
+        `;
+        wrap.appendChild(item);
+      }
+    }
+    function updateHistory(rows){
+      if(!Array.isArray(rows)) return;
+      const body = el('#history-body');
+      if(!body) return;
+      body.innerHTML = '';
+      for(const r of rows){
+        const tr = document.createElement('tr');
+        tr.className = 'odd:bg-white even:bg-blue-50/30 hover:bg-blue-50';
+        tr.innerHTML = `
+          <td class="p-3">${r.time||'—'}</td>
+          <td class="p-3">${r.type||'—'}</td>
+          <td class="p-3">${r.npm||'—'}</td>
+          <td class="p-3">${r.plate||'—'}</td>
+          <td class="p-3">${r.area||'—'}</td>
+          <td class="p-3">${r.duration||'—'}</td>`;
+        body.appendChild(tr);
+      }
+    }
+
+    // ===== WebSocket Client =====
+    const banner = document.getElementById('ws-banner');
+    let ws, retry = 0, pingTimer;
+    const WS_URL = (()=>{
+      // ganti path sesuai backend Anda
+      const proto = location.protocol === 'https:' ? 'wss://' : 'ws://';
+      return proto + location.host + '/ws/parkir';
+    })();
+
+    function connect(){
+      banner.classList.remove('hidden');
+      banner.textContent = 'Menghubungkan ke server…';
+      try{
+        ws = new WebSocket(WS_URL);
+      }catch(e){
+        console.error(e);
+        scheduleReconnect();
+        return;
+      }
+      ws.onopen = ()=>{
+        retry = 0;
+        banner.classList.add('hidden');
+        // ping tiap 25s supaya koneksi tetap hidup (opsional)
+        clearInterval(pingTimer);
+        pingTimer = setInterval(()=>{
+          if(ws && ws.readyState===1){ ws.send(JSON.stringify({type:'ping'})); }
+        }, 25000);
+      };
+      ws.onmessage = ev => {
+        try{
+          const msg = JSON.parse(ev.data);
+          if(msg.stats) updateStats(msg.stats);
+          if(msg.slots) updateSlots(msg.slots);
+          if(msg.history) updateHistory(msg.history);
+          if(msg.summary){ // opsional untuk halaman keluar
+            if(msg.summary.in) el('#sum-in').textContent = msg.summary.in;
+            if(msg.summary.duration) el('#sum-duration').textContent = msg.summary.duration;
+          }
+        }catch(err){ console.warn('WS parse error', err); }
+      };
+      ws.onclose = ()=>{ scheduleReconnect('Koneksi terputus. Mencoba lagi…'); };
+      ws.onerror = ()=>{ scheduleReconnect('Terjadi error koneksi. Mencoba lagi…'); };
+    }
+
+    function scheduleReconnect(text){
+      clearInterval(pingTimer);
+      retry = Math.min(30, (retry||0) + 2); // backoff sederhana
+      banner.classList.remove('hidden');
+      banner.textContent = text || 'Mencoba koneksi ulang…';
+      setTimeout(connect, retry*1000);
+    }
+
+    connect();
+
+    // ===== Dummy seed (opsional) bila WS belum ada) =====
+    const demo = {
+      stats: { total: 250, available: 178, used: 72, avgDuration: '1j 42m' },
+      slots: [
+        {id:'A-01', status:'free', meta:'Dekat gerbang'},
+        {id:'A-02', status:'busy', meta:'Terisi • 45m'},
+        {id:'A-03', status:'reserved', meta:'Reservasi'},
+        {id:'A-04', status:'free', meta:'Tersedia'},
+        {id:'A-05', status:'free', meta:'Tersedia'},
+        {id:'A-06', status:'busy', meta:'Terisi • 12m'},
+        {id:'B-01', status:'free', meta:'Tersedia'},
+        {id:'B-02', status:'busy', meta:'Terisi • 2j'},
+        {id:'B-03', status:'reserved', meta:'Reservasi'},
+        {id:'B-04', status:'free', meta:'Tersedia'},
+        {id:'B-05', status:'free', meta:'Tersedia'},
+        {id:'B-06', status:'busy', meta:'Terisi • 28m'},
+      ],
+      history: [
+        {time:'07:42', type:'Masuk', npm:'21.11.1234', plate:'D 1234 GIL', area:'Gerbang Utama', duration:'—'},
+        {time:'08:05', type:'Masuk', npm:'22.22.5678', plate:'D 5678 ULB', area:'Gedung A', duration:'—'},
+        {time:'10:13', type:'Keluar', npm:'21.11.1234', plate:'D 1234 GIL', area:'Gerbang Utama', duration:'2j 31m'},
+      ],
+      summary: {in: '08:05', duration: '2j 31m'}
+    };
+    // render awal biar UI tidak kosong bila WS belum ready
+    updateStats(demo.stats); updateSlots(demo.slots); updateHistory(demo.history);
+    el('#sum-in').textContent = demo.summary.in; el('#sum-duration').textContent = demo.summary.duration;
+  </script>
+</body>
+</html>
