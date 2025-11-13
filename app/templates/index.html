@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <title>Sistem Parkir Kampus – Tailwind</title>
+  <!-- Tailwind CDN (no build step) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body
+  class="min-h-dvh text-slate-900 [background:radial-gradient(1200px_800px_at_20%-10%,#eff6ff,transparent_60%),_radial-gradient(900px_600px_at_110%-20%,#e8f0ff,transparent_55%),_#f7faff]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" id="app">
+    <!-- HEADER -->
+    <header
+      class="sticky top-0 z-20 bg-gradient-to-br from-white to-blue-50 border border-blue-100 rounded-[18px] px-4 sm:px-6 py-3 shadow-card backdrop-blur-md saturate-125">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+        <!-- Brand -->
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3" aria-label="Identitas Aplikasi Parkir">
+            <div
+              class="w-10 h-10 rounded-xl logo-conic grid place-items-center text-white font-extrabold shadow-[inset_0_0_0_6px_#ffffff,0_6px_18px_rgba(30,64,175,.25)]"
+              aria-hidden="true">P</div>
+            <div>
+              <h1 class="text-[clamp(18px,2.1vw,22px)] tracking-wide font-semibold">
+                KampusParkir • Sistem QR
+              </h1>
+              <p class="text-xs text-slate-500 mt-0.5">Pengelolaan parkir kampus cepat, aman,
+                terintegrasi.</p>
+            </div>
+          </div>
+
+          <!-- Tombol Burger (Mobile Only) -->
+          <button id="menu-toggle" class="md:hidden text-blue-900 text-3xl focus:outline-none transition-transform"
+            aria-label="Buka navigasi">
+            <i class='bx bx-menu-alt-right'></i>
+          </button>
+        </div>
+
+        <!-- Navigasi -->
+        <nav class="w-max bg-blue-50 border border-blue-100 rounded-full p-1" aria-label="Navigasi Halaman">
+          <ul
+            class="flex flex-col md:flex-row flex-wrap justify-center md:grid md:grid-flow-col gap-1 text-sm font-semibold">
+            <li><a data-tab href="#dashboard"
+                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
+                  class='bx bx-home-smile text-lg'></i>
+                <span>Dashboard</span></a></li>
+            <li><a data-tab href="#masuk"
+                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
+                  class='bx bx-scan text-lg'></i>
+                <span>Scan Masuk</span></a></li>
+
+            <li><a data-tab href="#qrgenerator"
+                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
+                  class='bx bx-qr text-lg'></i>
+                <span>QR Mahasiswa</span></a></li>
+            <li><a data-tab href="#userprofile"
+                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2">
+                <i class='bx bx-user text-lg'></i>
+                <span>Profile</span></a></li>
+            <li><a data-tab href="#pengaturan"
+                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
+                  class='bx bx-cog text-lg'></i>
+                <span>Pengaturan</span></a></li>
+          </ul>
+
+        </nav>
+      </div>
+    </header>
+
+
+    <main class="mt-4 grid gap-4">
+      <!-- ============== DASHBOARD ============== -->
+      <section id="dashboard" data-view class="view">
+        <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          <!-- Stat Card -->
+          <article
+            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">Total Slot</div>
+            <div class="text-[clamp(28px,4vw,36px)] font-extrabold text-blue-900">250</div>
+            <p class="text-slate-500">Semua area & gedung</p>
+          </article>
+          <article
+            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">Tersedia</div>
+            <div class="text-[clamp(28px,4vw,36px)] font-extrabold text-blue-900">178</div>
+            <div
+              class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-green-50 text-green-700 border border-green-200">
+              <span class="w-2.5 h-2.5 rounded-full bg-green-600 ring-4 ring-green-500/15"></span>
+              Tingkat ketersediaan tinggi
+            </div>
+          </article>
+          <article
+            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">Terpakai</div>
+            <div class="text-[clamp(28px,4vw,36px)] font-extrabold text-blue-900">72</div>
+            <p class="text-slate-500">Update ± 1 menit lalu</p>
+          </article>
+          <article
+            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">Rata-rata Durasi
+            </div>
+            <div class="text-[clamp(28px,4vw,36px)] font-extrabold text-blue-900">1j 42m</div>
+            <p class="text-slate-500">Kendaraan parkir hari ini</p>
+          </article>
+        </div>
+        <a data-tab href="#riwayat"
+          class="tab mt-4 px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
+            class='bx bx-time text-xl'></i>
+          <span>Riwayat</span></a>
+
+        <article class="bg-white border border-blue-100 rounded-[18px] shadow-card mt-5">
+          <div class="px-5 pt-5 pb-3 text-[13px] font-bold uppercase tracking-wide text-slate-500" id="riwayat-title">
+            Riwayat
+            Hari Ini</div>
+          <div class="overflow-auto rounded-b-[18px] border-t border-blue-100/60">
+            <table class="w-full text-sm">
+              <thead class="sticky top-0 z-[1] bg-gradient-to-b from-blue-50 to-white text-blue-900">
+                <tr>
+                  <th class="text-left px-3 py-3">Waktu</th>
+                  <th class="text-left px-3 py-3">Jenis</th>
+                  <th class="text-left px-3 py-3">NPM / ID</th>
+                  <th class="text-left px-3 py-3">Nomor Polisi</th>
+                  <th class="text-left px-3 py-3">Area</th>
+                  <th class="text-left px-3 py-3">Durasi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
+                  <td class="px-3 py-3 border-t border-blue-100">07:42</td>
+                  <td class="px-3 py-3 border-t border-blue-100">Masuk</td>
+                  <td class="px-3 py-3 border-t border-blue-100">21.11.1234</td>
+                  <td class="px-3 py-3 border-t border-blue-100">D 1234 GIL</td>
+                  <td class="px-3 py-3 border-t border-blue-100">Gerbang Utama</td>
+                  <td class="px-3 py-3 border-t border-blue-100">—</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
+                  <td class="px-3 py-3 border-t border-blue-100">08:05</td>
+                  <td class="px-3 py-3 border-t border-blue-100">Masuk</td>
+                  <td class="px-3 py-3 border-t border-blue-100">22.22.5678</td>
+                  <td class="px-3 py-3 border-t border-blue-100">D 5678 ULB</td>
+                  <td class="px-3 py-3 border-t border-blue-100">Gedung A</td>
+                  <td class="px-3 py-3 border-t border-blue-100">—</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
+                  <td class="px-3 py-3 border-t border-blue-100">10:13</td>
+                  <td class="px-3 py-3 border-t border-blue-100">Keluar</td>
+                  <td class="px-3 py-3 border-t border-blue-100">21.11.1234</td>
+                  <td class="px-3 py-3 border-t border-blue-100">D 1234 GIL</td>
+                  <td class="px-3 py-3 border-t border-blue-100">Gerbang Utama</td>
+                  <td class="px-3 py-3 border-t border-blue-100">2j 31m</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <!-- ============== MASUK ============== -->
+      <section id="masuk" data-view class="view hidden">
+        <div class="grid gap-4 lg:grid-cols-2">
+          <article
+            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-2" id="masuk-title">
+              Scan QR — Gerbang Masuk</div>
+            <div
+              class="relative grid place-items-center text-center aspect-video rounded-[18px] border-2 border-dashed border-blue-300 scanbox-bg overflow-hidden">
+              <div
+                class="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent mix-blend-multiply">
+              </div>
+              <div class="relative">
+                <svg aria-hidden="true" width="70" height="70" viewBox="0 0 24 24" fill="none" class="mx-auto mb-2">
+                  <path d="M4 7V6a2 2 0 0 1 2-2h1" stroke="#1e40af" stroke-width="2" stroke-linecap="round" />
+                  <path d="M4 17v1a2 2 0 0 0 2 2h1" stroke="#1e40af" stroke-width="2" stroke-linecap="round" />
+                  <path d="M18 4h1a2 2 0 0 1 2 2v1" stroke="#1e40af" stroke-width="2" stroke-linecap="round" />
+                  <path d="M20 17v1a2 2 0 0 1-2 2h-1" stroke="#1e40af" stroke-width="2" stroke-linecap="round" />
+                  <rect x="7" y="7" width="10" height="10" rx="2" stroke="#2563eb" stroke-width="2" />
+                  <rect x="9.5" y="9.5" width="5" height="5" rx="1" fill="#3b82f6" />
+                </svg>
+                <h2 class="text-[clamp(20px,2.6vw,26px)] font-semibold">Arahkan QR KTM ke Kamera</h2>
+                <p class="max-w-prose mx-auto text-slate-500">UI saja (HTML). Integrasi kamera &
+                  pembacaan QR akan ditambahkan kemudian. Pastikan QR KTM terlihat jelas dan berada di
+                  dalam kotak.</p>
+              </div>
+            </div>
+          </article>
+
+          <article
+            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3">Detail Kendaraan
+              (Opsional)</div>
+            <div class="grid gap-3 md:grid-cols-2">
+              <label class="grid gap-2">
+                <span class="text-[13px] font-bold text-blue-900">NPM / ID Pengguna</span>
+                <input type="text" placeholder="Contoh: 21.11.1234"
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-[13px] font-bold text-blue-900">Nomor Polisi</span>
+                <input type="text" placeholder="D 1234 GIL"
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-[13px] font-bold text-blue-900">Jenis Kendaraan</span>
+                <select
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                  <option>Motor</option>
+                  <option>Mobil</option>
+                  <option>Lainnya</option>
+                </select>
+              </label>
+              <label class="grid gap-2">
+                <span class="text-[13px] font-bold text-blue-900">Area Parkir</span>
+                <select
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                  <option>Gerbang Utama</option>
+                  <option>Gedung A</option>
+                  <option>Gedung B</option>
+                  <option>Basement</option>
+                </select>
+              </label>
+            </div>
+            <div class="mt-4 flex gap-2">
+              <button type="button" class="btn-primary">Simpan Masuk</button>
+              <a href="#dashboard" class="btn-secondary">Kembali ke Dashboard</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============== USER PROFILE ============== -->
+      <section id="userprofile" data-view class="view hidden">
+        <div class="grid gap-4 lg:grid-cols-[.9fr_1.1fr]">
+
+          <!-- Profile Info Card -->
+          <article
+            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card grid place-items-center gap-3">
+            <div class="w-full text-center">
+              <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3">Profil Pengguna — Info
+              </div>
+              <div class="flex flex-col items-center gap-3">
+                <!-- Dummy Avatar -->
+                <div
+                  class="w-28 h-28 rounded-full border border-blue-100 shadow-[0_10px_22px_rgba(30,64,175,.12)] bg-white grid place-items-center text-blue-600 font-bold text-2xl">
+                  AB
+                </div>
+                <p class="text-slate-500 text-center">Informasi akun pengguna/admin yang sedang login.</p>
+                <button type="button"
+                  class="w-36 py-2 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
+                  Logout
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Edit Profile Card -->
+          <article
+            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3">Edit Profil Pengguna</div>
+            <form id="profileForm" class="grid gap-3 md:grid-cols-2">
+              <label class="grid gap-2">
+                <span class="text-[13px] font-bold text-blue-900">Nama Lengkap</span>
+                <input type="text" value="Admin User"
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-[13px] font-bold text-blue-900">Email</span>
+                <input type="email" value="admin@kampusparkir.com"
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-[13px] font-bold text-blue-900">Role</span>
+                <select
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                  <option>Admin</option>
+                  <option>Petugas</option>
+                  <option>Mahasiswa</option>
+                </select>
+              </label>
+              <label class="grid gap-2">
+                <span class="text-[13px] font-bold text-blue-900">Status Akun</span>
+                <select
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                  <option>Aktif</option>
+                  <option>Nonaktif</option>
+                </select>
+              </label>
+            </form>
+
+            <div class="mt-4 flex gap-2">
+              <button type="submit" class="w-36 py-2 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-colors duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">Simpan Perubahan</button>
+              <a href="#dashboard" class="btn-secondary w-36 py-2 text-center">Kembali</a>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+
+      <!-- ============== QR GENERATOR ============== -->
+      <section id="qrgenerator" data-view class="view hidden">
+        <div class="grid gap-4 lg:grid-cols-[.9fr_1.1fr]">
+          <article
+            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card grid place-items-center gap-3">
+            <div class="w-full">
+              <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3" id="qr-title">QR KTM —
+                Pratinjau</div>
+              <div class="grid place-items-center gap-3">
+                <div
+                  class="w-[168px] h-[168px] bg-white rounded-xl border border-blue-100 shadow-[0_10px_22px_rgba(30,64,175,.12)] p-2 grid place-items-center"
+                  role="img" aria-label="Contoh QR">
+                  <!-- Dummy QR SVG -->
+                  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                    <rect width="120" height="120" fill="#fff" />
+                    <rect x="8" y="8" width="28" height="28" fill="#000" />
+                    <rect x="84" y="8" width="28" height="28" fill="#000" />
+                    <rect x="8" y="84" width="28" height="28" fill="#000" />
+                    <rect x="44" y="44" width="10" height="10" fill="#000" />
+                    <rect x="58" y="44" width="6" height="6" fill="#000" />
+                    <rect x="70" y="44" width="12" height="12" fill="#000" />
+                    <rect x="44" y="60" width="6" height="6" fill="#000" />
+                    <rect x="54" y="60" width="10" height="10" fill="#000" />
+                    <rect x="68" y="60" width="6" height="6" fill="#000" />
+                    <rect x="80" y="60" width="10" height="10" fill="#000" />
+                    <rect x="44" y="76" width="12" height="12" fill="#000" />
+                    <rect x="60" y="76" width="6" height="6" fill="#000" />
+                    <rect x="70" y="76" width="10" height="10" fill="#000" />
+                  </svg>
+                </div>
+                <p class="text-slate-500 text-center">Contoh pratinjau QR. Nantinya digenerate dari
+                  NPM/ID.</p>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" class="btn-primary">Unduh QR</button>
+                  <a href="#masuk" class="btn-secondary">Gunakan untuk Masuk</a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article
+            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3">Buat QR untuk
+              Mahasiswa</div>
+            <div class="grid gap-3 md:grid-cols-2">
+              <label class="grid gap-2">
+                <span class="text-[13px] font-bold text-blue-900">NPM / ID</span>
+                <input type="text" placeholder="Masukkan NPM"
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-[13px] font-bold text-blue-900">Nama</span>
+                <input type="text" placeholder="Nama lengkap"
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-[13px] font-bold text-blue-900">Kategori</span>
+                <select
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                  <option>Mahasiswa</option>
+                  <option>Dosen</option>
+                  <option>Staff</option>
+                  <option>Tamu</option>
+                </select>
+              </label>
+              <label class="grid gap-2">
+                <span class="text-[13px] font-bold text-blue-900">Masa Berlaku</span>
+                <select
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                  <option>Tak terbatas</option>
+                  <option>1 Semester</option>
+                  <option>1 Tahun</option>
+                </select>
+              </label>
+            </div>
+            <div class="mt-4 flex gap-2">
+              <button type="button" class="btn-primary">Generate QR</button>
+              <a href="#dashboard" class="btn-secondary">Kembali</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============== RIWAYAT ============== -->
+      <section id="riwayat" data-view class="view hidden">
+        <article class="bg-white border border-blue-100 rounded-[18px] shadow-card">
+          <div class="px-5 pt-5 pb-3 text-[13px] font-bold uppercase tracking-wide text-slate-500" id="riwayat-title">
+            Riwayat Hari Ini</div>
+          <div class="overflow-auto rounded-b-[18px] border-t border-blue-100/60">
+            <table class="w-full text-sm">
+              <thead class="sticky top-0 z-[1] bg-gradient-to-b from-blue-50 to-white text-blue-900">
+                <tr>
+                  <th class="text-left px-3 py-3">Waktu</th>
+                  <th class="text-left px-3 py-3">Jenis</th>
+                  <th class="text-left px-3 py-3">NPM / ID</th>
+                  <th class="text-left px-3 py-3">Nomor Polisi</th>
+                  <th class="text-left px-3 py-3">Area</th>
+                  <th class="text-left px-3 py-3">Durasi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
+                  <td class="px-3 py-3 border-t border-blue-100">07:42</td>
+                  <td class="px-3 py-3 border-t border-blue-100">Masuk</td>
+                  <td class="px-3 py-3 border-t border-blue-100">21.11.1234</td>
+                  <td class="px-3 py-3 border-t border-blue-100">D 1234 GIL</td>
+                  <td class="px-3 py-3 border-t border-blue-100">Gerbang Utama</td>
+                  <td class="px-3 py-3 border-t border-blue-100">—</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
+                  <td class="px-3 py-3 border-t border-blue-100">08:05</td>
+                  <td class="px-3 py-3 border-t border-blue-100">Masuk</td>
+                  <td class="px-3 py-3 border-t border-blue-100">22.22.5678</td>
+                  <td class="px-3 py-3 border-t border-blue-100">D 5678 ULB</td>
+                  <td class="px-3 py-3 border-t border-blue-100">Gedung A</td>
+                  <td class="px-3 py-3 border-t border-blue-100">—</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
+                  <td class="px-3 py-3 border-t border-blue-100">10:13</td>
+                  <td class="px-3 py-3 border-t border-blue-100">Keluar</td>
+                  <td class="px-3 py-3 border-t border-blue-100">21.11.1234</td>
+                  <td class="px-3 py-3 border-t border-blue-100">D 1234 GIL</td>
+                  <td class="px-3 py-3 border-t border-blue-100">Gerbang Utama</td>
+                  <td class="px-3 py-3 border-t border-blue-100">2j 31m</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <!-- ============== PENGATURAN ============== -->
+      <section id="pengaturan" data-view class="view hidden">
+        <div class="grid gap-4 lg:grid-cols-2">
+          <article
+            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3" id="pengaturan-title">
+              Pengaturan Sistem</div>
+            <div class="grid gap-3 md:grid-cols-2">
+              <label class="grid gap-2">
+                <span class="text-[13px] font-bold text-blue-900">Jumlah Slot Total</span>
+                <input type="number" placeholder="Mis. 250"
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-[13px] font-bold text-blue-900">Nama Gerbang</span>
+                <input type="text" placeholder="Gerbang Utama"
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-[13px] font-bold text-blue-900">Tarif (opsional)</span>
+                <input type="text" placeholder="Contoh: 2000/jam"
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-[13px] font-bold text-blue-900">Notifikasi</span>
+                <select
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                  <option>Nonaktif</option>
+                  <option>Aktif — Email</option>
+                  <option>Aktif — WhatsApp</option>
+                </select>
+              </label>
+            </div>
+            <div class="mt-4 flex gap-2">
+              <button type="button" class="btn-primary">Simpan Pengaturan</button>
+              <a href="#dashboard" class="btn-secondary">Kembali</a>
+            </div>
+          </article>
+
+          <article
+            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-2">Informasi</div>
+            <p class="text-slate-500">informasi tentang sistem parkir saja</p>
+            <ul class="text-slate-500 list-disc pl-5 mt-2">
+              <li>pasipurasipapasipaga</li>
+              <li>uiauuiauiaauuia</li>
+              <li>ahihihihihi</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+    </main>
+
+  </div>
+
+  <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+
+</html>
