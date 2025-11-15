@@ -73,3 +73,33 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     });
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const masukSection = document.getElementById("masuk");
+    const cam = document.getElementById("camera-stream");
+    const btnBack = document.getElementById("btn-back-dashboard");
+
+    function startCamera() {
+        cam.src = "/camera";
+    }
+
+    function stopCamera() {
+        cam.src = "";
+    }
+
+    const observer = new MutationObserver(() => {
+        if (!masukSection.classList.contains("hidden")) {
+            startCamera();
+        } else {
+            stopCamera();
+        }
+    });
+
+    observer.observe(masukSection, { attributes: true });
+
+    btnBack.addEventListener("click", () => {
+        stopCamera();
+    });
+});
+

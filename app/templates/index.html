@@ -159,7 +159,7 @@
           </div>
         </article>
       </section>
-
+      <!-- =================kamera==================================== -->
       <!-- ============== MASUK ============== -->
       <section id="masuk" data-view class="view hidden">
         <div class="grid gap-4 lg:grid-cols-2">
@@ -169,6 +169,7 @@
               Scan QR — Gerbang Masuk</div>
             <div
               class="relative grid place-items-center text-center aspect-video rounded-[18px] border-2 border-dashed border-blue-300 scanbox-bg overflow-hidden">
+              <img src="/camera" id="camera-stream" class="w-full h-full object-cover" />
               <div
                 class="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent mix-blend-multiply">
               </div>
@@ -226,11 +227,12 @@
             </div>
             <div class="mt-4 flex gap-2">
               <button type="button" class="btn-primary">Simpan Masuk</button>
-              <a href="#dashboard" class="btn-secondary">Kembali ke Dashboard</a>
+              <a href="#dashboard" id="btn-back-dashboard" class="btn-secondary">Kembali ke Dashboard</a>
             </div>
           </article>
         </div>
       </section>
+      <!--===========================kamera====================================-->
 
       <!-- ============== USER PROFILE ============== -->
       <section id="userprofile" data-view class="view hidden">
@@ -292,12 +294,57 @@
             </form>
 
             <div class="mt-4 flex gap-2">
-              <button type="submit" class="w-36 py-2 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-colors duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">Simpan Perubahan</button>
+              <button type="submit"
+                class="w-36 py-2 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-colors duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">Simpan
+                Perubahan</button>
               <a href="#dashboard" class="btn-secondary w-36 py-2 text-center">Kembali</a>
             </div>
           </article>
 
+          <!-- TABEL PENGUNA -->
+
         </div>
+        <article class="bg-white border border-blue-100 rounded-[18px] shadow-card mt-5">
+          <div class="px-5 pt-5 pb-3 text-[13px] font-bold uppercase tracking-wide text-slate-500" id="pengguna-title">
+            Daftar Pengguna
+          </div>
+
+          <div class="overflow-auto rounded-b-[18px] border-t border-blue-100/60">
+            <table class="w-full text-sm">
+              <thead class="sticky top-0 z-[1] bg-gradient-to-b from-blue-50 to-white text-blue-900">
+                <tr>
+                  <th class="text-left px-3 py-3">No</th>
+                  <th class="text-left px-3 py-3">Nama</th>
+                  <th class="text-left px-3 py-3">NPM / ID</th>
+                  <th class="text-left px-3 py-3">Program Studi</th>
+                  <th class="text-left px-3 py-3">Nomor Polisi</th>
+                  <th class="text-left px-3 py-3">Status</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
+                  <td class="px-3 py-3 border-t border-blue-100">1</td>
+                  <td class="px-3 py-3 border-t border-blue-100">Zahra Sabila</td>
+                  <td class="px-3 py-3 border-t border-blue-100">21.11.1234</td>
+                  <td class="px-3 py-3 border-t border-blue-100">Teknik Informatika</td>
+                  <td class="px-3 py-3 border-t border-blue-100">D 1234 GIL</td>
+                  <td class="px-3 py-3 border-t border-blue-100 text-green-600 font-semibold">Aktif</td>
+                </tr>
+
+                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
+                  <td class="px-3 py-3 border-t border-blue-100">2</td>
+                  <td class="px-3 py-3 border-t border-blue-100">Ramanayshilla</td>
+                  <td class="px-3 py-3 border-t border-blue-100">22.22.5678</td>
+                  <td class="px-3 py-3 border-t border-blue-100">Sistem Informasi</td>
+                  <td class="px-3 py-3 border-t border-blue-100">D 5678 ULB</td>
+                  <td class="px-3 py-3 border-t border-blue-100 text-green-600 font-semibold">Aktif</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
       </section>
 
 
