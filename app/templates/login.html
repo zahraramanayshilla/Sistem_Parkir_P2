@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Login & Register – Sistem Parkir Kampus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-blue-50">
+    <div class="w-full max-w-md p-6 bg-white/80 backdrop-blur-md rounded-2xl shadow-card border border-blue-100">
+        <!-- Judul -->
+        <div class="text-center fade-slide fade-slide-active">
+            <h1 class="text-3xl font-extrabold text-blue-900">KampusParkir</h1>
+            <p class="text-sm text-slate-500 mt-1">Sistem Parkir Kampus – QR KTM Terintegrasi</p>
+        </div>
+
+        <!-- Tabs Login / Register -->
+        <div class="flex justify-between mb-6 mt-5 border border-blue-200 rounded-xl overflow-hidden shadow-sm">
+            <button id="loginTab"
+                class="flex-1 py-2 px-4 font-semibold rounded-l-xl text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-200 hover:shadow-md transition ">Login</button>
+            <button id="registerTab"
+                class="flex-1 py-2 px-4 font-semibold rounded-r-xl text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition ">Register</button>
+        </div>
+
+        <!-- Form Container -->
+        <div>
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-blue-900">Email / NPM</label>
+                    <input type="text" placeholder="Masukkan email atau NPM"
+                        class="mt-1 w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 bg-white shadow-inner" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-blue-900">Password</label>
+                    <input type="password" placeholder="Masukkan password"
+                        class="mt-1 w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 bg-white shadow-inner" />
+                </div>
+                <button type="submit"
+                    class="w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition">Login</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-sm font-medium text-blue-900">Nama Lengkap</label>
+                    <input type="text" placeholder="Masukkan nama lengkap"
+                        class="mt-1 w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 bg-white shadow-inner" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-blue-900">Email / NPM</label>
+                    <input type="text" placeholder="Masukkan email atau NPM"
+                        class="mt-1 w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 bg-white shadow-inner" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-blue-900">Password</label>
+                    <input type="password" placeholder="Masukkan password"
+                        class="mt-1 w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 bg-white shadow-inner" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-blue-900">Konfirmasi Password</label>
+                    <input type="password" placeholder="Konfirmasi password"
+                        class="mt-1 w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 bg-white shadow-inner" />
+                </div>
+                <button type="submit"
+                    class="w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition">Register</button>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <p class="mt-4 text-sm text-slate-500 text-center">© 2025 KampusParkir • Sistem QR</p>
+    </div>
+
+    <script>
+        // Toggle Login / Register
+        const loginTab = document.getElementById('loginTab');
+        const registerTab = document.getElementById('registerTab');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+
+        loginTab.addEventListener('click', () => {
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+            loginTab.classList.add('bg-blue-100');
+            registerTab.classList.remove('bg-blue-100');
+        });
+
+        registerTab.addEventListener('click', () => {
+            registerForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+            registerTab.classList.add('bg-blue-100');
+            loginTab.classList.remove('bg-blue-100');
+        });
+    </script>
+</body>
+
+</html>
