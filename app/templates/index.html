@@ -23,11 +23,11 @@
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-3" aria-label="Identitas Aplikasi Parkir">
             <div
-              class="w-10 h-10 rounded-xl logo-conic grid place-items-center text-white font-extrabold shadow-[inset_0_0_0_6px_#ffffff,0_6px_18px_rgba(30,64,175,.25)]"
-              aria-hidden="true">P</div>
+              class="w-10 h-10 rounded-xl grid place-items-center text-white shadow-lg"
+              aria-hidden="true"><img src="../static/image/ulbi.png" alt=""></div>
             <div>
               <h1 class="text-[clamp(18px,2.1vw,22px)] tracking-wide font-semibold">
-                KampusParkir • Sistem QR
+                ULBIParkir • Sistem QR
               </h1>
               <p class="text-xs text-slate-500 mt-0.5">Pengelolaan parkir kampus cepat, aman,
                 terintegrasi.</p>
@@ -49,15 +49,10 @@
                 class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
                   class='bx bx-home-smile text-lg'></i>
                 <span>Dashboard</span></a></li>
-            <li><a data-tab href="#masuk"
-                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
-                  class='bx bx-scan text-lg'></i>
-                <span>Scan Masuk</span></a></li>
-
-            <li><a data-tab href="#qrgenerator"
-                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
-                  class='bx bx-qr text-lg'></i>
-                <span>QR Mahasiswa</span></a></li>
+            <li><a data-tab href="#riwayat"
+                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2">
+                <i class='bx bx-time text-lg'></i>
+                <span>Riwayat</span></a></li>
             <li><a data-tab href="#userprofile"
                 class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2">
                 <i class='bx bx-user text-lg'></i>
@@ -159,80 +154,6 @@
           </div>
         </article>
       </section>
-      <!-- =================kamera==================================== -->
-      <!-- ============== MASUK ============== -->
-      <section id="masuk" data-view class="view hidden">
-        <div class="grid gap-4 lg:grid-cols-2">
-          <article
-            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
-            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-2" id="masuk-title">
-              Scan QR — Gerbang Masuk</div>
-            <div
-              class="relative grid place-items-center text-center aspect-video rounded-[18px] border-2 border-dashed border-blue-300 scanbox-bg overflow-hidden">
-              <img src="/camera" id="camera-stream" class="w-full h-full object-cover" />
-              <div
-                class="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent mix-blend-multiply">
-              </div>
-              <div class="relative">
-                <svg aria-hidden="true" width="70" height="70" viewBox="0 0 24 24" fill="none" class="mx-auto mb-2">
-                  <path d="M4 7V6a2 2 0 0 1 2-2h1" stroke="#1e40af" stroke-width="2" stroke-linecap="round" />
-                  <path d="M4 17v1a2 2 0 0 0 2 2h1" stroke="#1e40af" stroke-width="2" stroke-linecap="round" />
-                  <path d="M18 4h1a2 2 0 0 1 2 2v1" stroke="#1e40af" stroke-width="2" stroke-linecap="round" />
-                  <path d="M20 17v1a2 2 0 0 1-2 2h-1" stroke="#1e40af" stroke-width="2" stroke-linecap="round" />
-                  <rect x="7" y="7" width="10" height="10" rx="2" stroke="#2563eb" stroke-width="2" />
-                  <rect x="9.5" y="9.5" width="5" height="5" rx="1" fill="#3b82f6" />
-                </svg>
-                <h2 class="text-[clamp(20px,2.6vw,26px)] font-semibold">Arahkan QR KTM ke Kamera</h2>
-                <p class="max-w-prose mx-auto text-slate-500">UI saja (HTML). Integrasi kamera &
-                  pembacaan QR akan ditambahkan kemudian. Pastikan QR KTM terlihat jelas dan berada di
-                  dalam kotak.</p>
-              </div>
-            </div>
-          </article>
-
-          <article
-            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
-            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3">Detail Kendaraan
-              (Opsional)</div>
-            <div class="grid gap-3 md:grid-cols-2">
-              <label class="grid gap-2">
-                <span class="text-[13px] font-bold text-blue-900">NPM / ID Pengguna</span>
-                <input type="text" placeholder="Contoh: 21.11.1234"
-                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
-              </label>
-              <label class="grid gap-2">
-                <span class="text-[13px] font-bold text-blue-900">Nomor Polisi</span>
-                <input type="text" placeholder="D 1234 GIL"
-                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
-              </label>
-              <label class="grid gap-2">
-                <span class="text-[13px] font-bold text-blue-900">Jenis Kendaraan</span>
-                <select
-                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                  <option>Motor</option>
-                  <option>Mobil</option>
-                  <option>Lainnya</option>
-                </select>
-              </label>
-              <label class="grid gap-2">
-                <span class="text-[13px] font-bold text-blue-900">Area Parkir</span>
-                <select
-                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                  <option>Gerbang Utama</option>
-                  <option>Gedung A</option>
-                  <option>Gedung B</option>
-                  <option>Basement</option>
-                </select>
-              </label>
-            </div>
-            <div class="mt-4 flex gap-2">
-              <button type="button" class="btn-primary">Simpan Masuk</button>
-              <a href="#dashboard" id="btn-back-dashboard" class="btn-secondary">Kembali ke Dashboard</a>
-            </div>
-          </article>
-        </div>
-      </section>
-      <!--===========================kamera====================================-->
 
       <!-- ============== USER PROFILE ============== -->
       <section id="userprofile" data-view class="view hidden">
@@ -345,90 +266,6 @@
           </div>
         </article>
 
-      </section>
-
-
-      <!-- ============== QR GENERATOR ============== -->
-      <section id="qrgenerator" data-view class="view hidden">
-        <div class="grid gap-4 lg:grid-cols-[.9fr_1.1fr]">
-          <article
-            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card grid place-items-center gap-3">
-            <div class="w-full">
-              <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3" id="qr-title">QR KTM —
-                Pratinjau</div>
-              <div class="grid place-items-center gap-3">
-                <div
-                  class="w-[168px] h-[168px] bg-white rounded-xl border border-blue-100 shadow-[0_10px_22px_rgba(30,64,175,.12)] p-2 grid place-items-center"
-                  role="img" aria-label="Contoh QR">
-                  <!-- Dummy QR SVG -->
-                  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
-                    <rect width="120" height="120" fill="#fff" />
-                    <rect x="8" y="8" width="28" height="28" fill="#000" />
-                    <rect x="84" y="8" width="28" height="28" fill="#000" />
-                    <rect x="8" y="84" width="28" height="28" fill="#000" />
-                    <rect x="44" y="44" width="10" height="10" fill="#000" />
-                    <rect x="58" y="44" width="6" height="6" fill="#000" />
-                    <rect x="70" y="44" width="12" height="12" fill="#000" />
-                    <rect x="44" y="60" width="6" height="6" fill="#000" />
-                    <rect x="54" y="60" width="10" height="10" fill="#000" />
-                    <rect x="68" y="60" width="6" height="6" fill="#000" />
-                    <rect x="80" y="60" width="10" height="10" fill="#000" />
-                    <rect x="44" y="76" width="12" height="12" fill="#000" />
-                    <rect x="60" y="76" width="6" height="6" fill="#000" />
-                    <rect x="70" y="76" width="10" height="10" fill="#000" />
-                  </svg>
-                </div>
-                <p class="text-slate-500 text-center">Contoh pratinjau QR. Nantinya digenerate dari
-                  NPM/ID.</p>
-                <div class="flex flex-wrap gap-2">
-                  <button type="button" class="btn-primary">Unduh QR</button>
-                  <a href="#masuk" class="btn-secondary">Gunakan untuk Masuk</a>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article
-            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
-            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3">Buat QR untuk
-              Mahasiswa</div>
-            <div class="grid gap-3 md:grid-cols-2">
-              <label class="grid gap-2">
-                <span class="text-[13px] font-bold text-blue-900">NPM / ID</span>
-                <input type="text" placeholder="Masukkan NPM"
-                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
-              </label>
-              <label class="grid gap-2">
-                <span class="text-[13px] font-bold text-blue-900">Nama</span>
-                <input type="text" placeholder="Nama lengkap"
-                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
-              </label>
-              <label class="grid gap-2">
-                <span class="text-[13px] font-bold text-blue-900">Kategori</span>
-                <select
-                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                  <option>Mahasiswa</option>
-                  <option>Dosen</option>
-                  <option>Staff</option>
-                  <option>Tamu</option>
-                </select>
-              </label>
-              <label class="grid gap-2">
-                <span class="text-[13px] font-bold text-blue-900">Masa Berlaku</span>
-                <select
-                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                  <option>Tak terbatas</option>
-                  <option>1 Semester</option>
-                  <option>1 Tahun</option>
-                </select>
-              </label>
-            </div>
-            <div class="mt-4 flex gap-2">
-              <button type="button" class="btn-primary">Generate QR</button>
-              <a href="#dashboard" class="btn-secondary">Kembali</a>
-            </div>
-          </article>
-        </div>
       </section>
 
       <!-- ============== RIWAYAT ============== -->
