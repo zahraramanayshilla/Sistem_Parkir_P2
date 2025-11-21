@@ -4,66 +4,81 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="../static/image/ulbi.png" type="image/png">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <title>Sistem Parkir Kampus – Tailwind</title>
+  <title>Sistem Parkir ULBI</title>
   <!-- Tailwind CDN (no build step) -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body
   class="min-h-dvh text-slate-900 [background:radial-gradient(1200px_800px_at_20%-10%,#eff6ff,transparent_60%),_radial-gradient(900px_600px_at_110%-20%,#e8f0ff,transparent_55%),_#f7faff]">
+
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" id="app">
+
     <!-- HEADER -->
     <header
       class="sticky top-0 z-20 bg-gradient-to-br from-white to-blue-50 border border-blue-100 rounded-[18px] px-4 sm:px-6 py-3 shadow-card backdrop-blur-md saturate-125">
+
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
         <!-- Brand -->
         <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3" aria-label="Identitas Aplikasi Parkir">
-            <div
-              class="w-10 h-10 rounded-xl grid place-items-center text-white shadow-lg"
-              aria-hidden="true"><img src="../static/image/ulbi.png" alt=""></div>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl grid place-items-center text-white shadow-lg">
+              <img src="../static/image/ulbi.png" alt="">
+            </div>
             <div>
               <h1 class="text-[clamp(18px,2.1vw,22px)] tracking-wide font-semibold">
                 ULBIParkir • Sistem QR
               </h1>
-              <p class="text-xs text-slate-500 mt-0.5">Pengelolaan parkir kampus cepat, aman,
-                terintegrasi.</p>
+              <p class="text-xs text-slate-500 mt-0.5">Pengelolaan parkir kampus cepat, aman, terintegrasi.</p>
             </div>
           </div>
 
-          <!-- Tombol Burger (Mobile Only) -->
-          <button id="menu-toggle" class="md:hidden text-blue-900 text-3xl focus:outline-none transition-transform"
-            aria-label="Buka navigasi">
-            <i class='bx bx-menu-alt-right'></i>
-          </button>
+          <!-- Tombol Burger (Checkbox Hack) -->
+          <label for="menu-toggle" class="md:hidden text-blue-900 text-3xl cursor-pointer">
+            <i class="bx bx-menu-alt-right"></i>
+          </label>
         </div>
 
+        <!-- Checkbox Hidden -->
+        <input type="checkbox" id="menu-toggle" class="peer hidden">
+
         <!-- Navigasi -->
-        <nav class="w-max bg-blue-50 border border-blue-100 rounded-full p-1" aria-label="Navigasi Halaman">
+        <nav class="max-md:hidden peer-checked:max-md:block">
           <ul
-            class="flex flex-col md:flex-row flex-wrap justify-center md:grid md:grid-flow-col gap-1 text-sm font-semibold">
+            class="bg-blue-50 md:bg-transparent border md:border-none border-blue-100 rounded-xl md:rounded-full p-3 md:p-1 flex flex-col md:flex-row gap-2 md:gap-1 text-sm font-semibold">
+
             <li><a data-tab href="#dashboard"
-                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
-                  class='bx bx-home-smile text-lg'></i>
+                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                <i class='bx bx-home-smile text-lg'></i>
                 <span>Dashboard</span></a></li>
+
             <li><a data-tab href="#riwayat"
-                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2">
+                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
                 <i class='bx bx-time text-lg'></i>
                 <span>Riwayat</span></a></li>
+
+            <li><a data-tab href="#masuk"
+                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                <i class='bx bx-camera text-lg'></i>
+                <span>Kamera</span></a></li>
+
             <li><a data-tab href="#userprofile"
-                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2">
+                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
                 <i class='bx bx-user text-lg'></i>
                 <span>Profile</span></a></li>
-            <li><a data-tab href="#pengaturan"
-                class="tab px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
-                  class='bx bx-cog text-lg'></i>
-                <span>Pengaturan</span></a></li>
-          </ul>
 
+            <li><a data-tab href="#pengaturan"
+                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                <i class='bx bx-cog text-lg'></i>
+                <span>Pengaturan</span></a></li>
+
+          </ul>
         </nav>
+
       </div>
     </header>
 
@@ -74,13 +89,13 @@
         <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <!-- Stat Card -->
           <article
-            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+            class="bg-gradient-to-b from-white to-blue-400/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
             <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">Total Slot</div>
             <div class="text-[clamp(28px,4vw,36px)] font-extrabold text-blue-900">250</div>
             <p class="text-slate-500">Semua area & gedung</p>
           </article>
           <article
-            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+            class="bg-gradient-to-b from-white to-yellow-400/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
             <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">Tersedia</div>
             <div class="text-[clamp(28px,4vw,36px)] font-extrabold text-blue-900">178</div>
             <div
@@ -90,13 +105,13 @@
             </div>
           </article>
           <article
-            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+            class="bg-gradient-to-b from-white to-orange-400/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
             <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">Terpakai</div>
             <div class="text-[clamp(28px,4vw,36px)] font-extrabold text-blue-900">72</div>
             <p class="text-slate-500">Update ± 1 menit lalu</p>
           </article>
           <article
-            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+            class="bg-gradient-to-b from-white to-green-400/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
             <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">Rata-rata Durasi
             </div>
             <div class="text-[clamp(28px,4vw,36px)] font-extrabold text-blue-900">1j 42m</div>
@@ -107,6 +122,72 @@
           class="tab mt-4 px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
             class='bx bx-time text-xl'></i>
           <span>Riwayat</span></a>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+
+          <!-- diagram statistik -->
+          <div class="bg-white p-5 rounded-xl shadow lg:col-span-2">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-bold text-gray-700">Statistik Kendaraan Masuk (Mingguan)</h3>
+              <select class="text-xs border rounded p-1 bg-gray-50">
+                <option>Minggu Ini</option>
+                <option>Bulan Ini</option>
+              </select>
+            </div>
+            <div class="h-64 w-full relative">
+              <canvas id="trafficChart"></canvas>
+            </div>
+          </div>
+          <div class="bg-white p-5 rounded-xl shadow lg:col-span-1">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-bold text-gray-700">Log Aktivitas</h3>
+              <button class="text-blue-600 text-xs hover:underline">Lihat Semua</button>
+            </div>
+            <div class="space-y-4">
+              <div class="flex items-start space-x-3">
+                <div class="bg-green-100 p-2 rounded-full text-green-600 text-xs">
+                  <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-gray-700">Motor Masuk (Mahasiswa)</p>
+                  <p class="text-xs text-gray-500">B 4567 TZN • 10:42 WIB</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-3">
+                <div class="bg-red-100 p-2 rounded-full text-red-600 text-xs">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-red-600">QR Tidak Terdaftar!</p>
+                  <p class="text-xs text-gray-500">Gate 1 • 10:35 WIB</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-3">
+                <div class="bg-blue-100 p-2 rounded-full text-blue-600 text-xs">
+                  <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-gray-700">Mobil Keluar (Dosen)</p>
+                  <p class="text-xs text-gray-500">D 1234 ABC • 10:30 WIB</p>
+                  <p class="text-xs text-green-600 font-semibold">Rp 5.000 (QRIS)</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-3">
+                <div class="bg-green-100 p-2 rounded-full text-green-600 text-xs">
+                  <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-gray-700">Motor Masuk (Mahasiswa)</p>
+                  <p class="text-xs text-gray-500">B 9988 UY • 10:15 WIB</p>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4">
+              <button class="w-full bg-slate-800 text-white py-2 rounded text-sm hover:bg-slate-700">
+                <i class="fa-solid fa-file-export mr-2"></i> Export Laporan (PDF)
+              </button>
+            </div>
+          </div>
+        </div>
 
         <article class="bg-white border border-blue-100 rounded-[18px] shadow-card mt-5">
           <div class="px-5 pt-5 pb-3 text-[13px] font-bold uppercase tracking-wide text-slate-500" id="riwayat-title">
@@ -153,6 +234,68 @@
             </table>
           </div>
         </article>
+      </section>
+
+      <!-- ============== MASUK ============== -->
+      <section id="masuk" data-view class="view hidden">
+        <div class="grid gap-4 lg:grid-cols-2">
+          <article
+            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-2" id="masuk-title"> Scan QR —
+              Gerbang
+              Masuk</div>
+            <!-- cctv -->
+            <div class="bg-white p-5 rounded-xl shadow lg:col-span-1">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-gray-700">Live CCTV (Gate 1)</h3>
+                <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded animate-pulse">●
+                  LIVE</span>
+              </div>
+              <div
+                class="bg-black rounded-lg h-48 flex items-center justify-center text-gray-500 relative overflow-hidden">
+                <div class="absolute inset-0 bg-slate-800 flex flex-col items-center justify-center">
+                  <i class="fa-solid fa-video-slash text-4xl mb-2"></i>
+                  <p class="text-sm">Menghubungkan ke ESP32-CAM...</p>
+                </div>
+              </div>
+              <div class="mt-4 grid grid-cols-2 gap-2">
+                <button class="bg-blue-50 text-blue-600 py-2 rounded text-sm font-semibold hover:bg-blue-100">Buka
+                  Gate</button>
+                <button
+                  class="bg-red-50 text-red-600 py-2 rounded text-sm font-semibold hover:bg-red-100">Alarm</button>
+              </div>
+            </div>
+          </article>
+          <article
+            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3">Detail Kendaraan (Opsional)
+            </div>
+            <div class="grid gap-3 md:grid-cols-2"> <label class="grid gap-2"> <span
+                  class="text-[13px] font-bold text-blue-900">NPM / ID Pengguna</span> <input type="text"
+                  placeholder="Contoh: 21.11.1234"
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+              </label> <label class="grid gap-2"> <span class="text-[13px] font-bold text-blue-900">Nomor Polisi</span>
+                <input type="text" placeholder="D 1234 GIL"
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+              </label> <label class="grid gap-2"> <span class="text-[13px] font-bold text-blue-900">Jenis
+                  Kendaraan</span>
+                <select
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                  <option>Motor</option>
+                  <option>Mobil</option>
+                  <option>Lainnya</option>
+                </select> </label> <label class="grid gap-2"> <span class="text-[13px] font-bold text-blue-900">Area
+                  Parkir</span> <select
+                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                  <option>Gerbang Utama</option>
+                  <option>Gedung A</option>
+                  <option>Gedung B</option>
+                  <option>Basement</option>
+                </select> </label> </div>
+            <div class="mt-4 flex gap-2"> <button type="button" class="btn-primary">Simpan Masuk</button> <a
+                href="#dashboard" class="btn-secondary">Kembali ke Dashboard</a> </div>
+          </article>
+        </div>
       </section>
 
       <!-- ============== USER PROFILE ============== -->
