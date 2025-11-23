@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Campus Parking Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .parking-slot {
+            transition: all 0.3s ease;
+        }
+
+        .parking-slot:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <aside class="w-64 bg-blue-900 text-white flex flex-col hidden md:flex">
+            <div class="h-16 flex items-center justify-center border-b border-slate-700">
+                <h1 class="text-xl font-bold text-blue-400"><i class="fa-solid fa-square-parking mr-2"></i>UlbiParking
+                </h1>
+            </div>
+
+            <nav class="flex-1 px-2 py-4 space-y-2 overflow-y-auto">
+                <a href="#" class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg">
+                    <i class="fa-solid fa-gauge mr-3 w-5"></i> Dashboard
+                </a>
+                <a href="#" class="flex items-center px-4 py-2 text-gray-300 hover:bg-slate-800 rounded-lg transition">
+                    <i class="fa-solid fa-video mr-3 w-5"></i> Monitoring & CCTV
+                </a>
+                <a href="#" class="flex items-center px-4 py-2 text-gray-300 hover:bg-slate-800 rounded-lg transition">
+                    <i class="fa-solid fa-chart-pie mr-3 w-5"></i> Statistik & Laporan
+                </a>
+                <a href="#" class="flex items-center px-4 py-2 text-gray-300 hover:bg-slate-800 rounded-lg transition">
+                    <i class="fa-solid fa-users mr-3 w-5"></i> Manajemen User
+                </a>
+                <a href="#" class="flex items-center px-4 py-2 text-gray-300 hover:bg-slate-800 rounded-lg transition">
+                    <i class="fa-solid fa-wallet mr-3 w-5"></i> Keuangan
+                </a>
+                <div class="pt-4 border-t border-slate-700">
+                    <p class="px-4 text-xs text-gray-500 uppercase mb-2">System</p>
+                    <a href="#"
+                        class="flex items-center px-4 py-2 text-gray-300 hover:bg-slate-800 rounded-lg transition">
+                        <i class="fa-solid fa-gear mr-3 w-5"></i> Pengaturan
+                    </a>
+                    <a href="#"
+                        class="flex items-center px-4 py-2 text-red-400 hover:bg-slate-800 rounded-lg transition">
+                        <i class="fa-solid fa-right-from-bracket mr-3 w-5"></i> Logout
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <div class="flex-1 flex flex-col h-screen overflow-hidden">
+            <!-- HEADER -->
+            <header
+                class="sticky top-0 z-20 bg-gradient-to-br from-white to-blue-50 border border-blue-100 rounded-[18px] px-4 sm:px-6 py-3 shadow-card backdrop-blur-md saturate-125">
+
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+                    <!-- Brand -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl grid place-items-center text-white shadow-lg">
+                                <img src="../static/image/ulbi.png" alt="">
+                            </div>
+                            <div>
+                                <h1 class="text-[clamp(18px,2.1vw,22px)] tracking-wide font-semibold">
+                                    ULBIParkir • Sistem QR
+                                </h1>
+                                <p class="text-xs text-slate-500 mt-0.5">Pengelolaan parkir kampus cepat, aman,
+                                    terintegrasi.</p>
+                            </div>
+                        </div>
+
+                        <!-- Tombol Burger (Checkbox Hack) -->
+                        <label for="menu-toggle" class="md:hidden text-blue-900 text-3xl cursor-pointer">
+                            <i class="bx bx-menu-alt-right"></i>
+                        </label>
+                    </div>
+
+                    <!-- Checkbox Hidden -->
+                    <input type="checkbox" id="menu-toggle" class="peer hidden">
+
+                    <!-- Navigasi -->
+                    <nav class="max-md:hidden peer-checked:max-md:block">
+                        <ul
+                            class="bg-blue-50 md:bg-transparent border md:border-none border-blue-100 rounded-xl md:rounded-full p-3 md:p-1 flex flex-col md:flex-row gap-2 md:gap-1 text-sm font-semibold">
+
+                            <li><a data-tab href="#dashboard"
+                                    class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                    <i class='bx bx-home-smile text-lg'></i>
+                                    <span>Dashboard</span></a></li>
+
+                            <li><a data-tab href="#riwayat"
+                                    class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                    <i class='bx bx-time text-lg'></i>
+                                    <span>Riwayat</span></a></li>
+
+
+                            <li><a data-tab href="#masuk"
+                                    class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                    <i class='bx bx-camera text-lg'></i>
+                                    <span>Kamera</span></a></li>
+
+                            <li><a data-tab href="#userprofile"
+                                    class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                    <i class='bx bx-user text-lg'></i>
+                                    <span>Profile</span></a></li>
+
+                            <li><a data-tab href="#pengaturan"
+                                    class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                    <i class='bx bx-cog text-lg'></i>
+                                    <span>Pengaturan</span></a></li>
+                            <button class="relative text-gray-600 hover:text-blue-600">
+                                <i class="fa-solid fa-bell text-xl"></i>
+                                <span
+                                    class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                            </button>
+                        </ul>
+                    </nav>
+
+                </div>
+            </header>
+            <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div class="bg-white rounded-xl shadow p-5 border-l-4 border-blue-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase font-bold">Total Kapasitas</p>
+                                <h3 class="text-2xl font-bold text-gray-800">1.200</h3>
+                                <p class="text-sm text-gray-500 mt-1">Motor: 800 | Mobil: 400</p>
+                            </div>
+                            <div class="p-2 bg-blue-100 rounded-lg text-blue-600"><i
+                                    class="fa-solid fa-square-parking text-xl"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow p-5 border-l-4 border-green-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase font-bold">Slot Tersedia</p>
+                                <h3 class="text-2xl font-bold text-green-600">342</h3>
+                                <p class="text-sm text-gray-500 mt-1">Status: <span
+                                        class="text-green-600 font-bold">AMAN</span></p>
+                            </div>
+                            <div class="p-2 bg-green-100 rounded-lg text-green-600"><i
+                                    class="fa-solid fa-check text-xl"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow p-5 border-l-4 border-yellow-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase font-bold">Okupansi Parkir</p>
+                                <h3 class="text-2xl font-bold text-yellow-600">71.5%</h3>
+                                <p class="text-sm text-gray-500 mt-1">Peak Hour: 09:00 - 11:00</p>
+                            </div>
+                            <div class="p-2 bg-yellow-100 rounded-lg text-yellow-600"><i
+                                    class="fa-solid fa-chart-line text-xl"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow p-5 border-l-4 border-red-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase font-bold">Security Alert</p>
+                                <h3 class="text-2xl font-bold text-red-600">2</h3>
+                                <p class="text-sm text-gray-500 mt-1">QR Gagal / Overstay</p>
+                            </div>
+                            <div class="p-2 bg-red-100 rounded-lg text-red-600"><i
+                                    class="fa-solid fa-triangle-exclamation text-xl"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- cctv -->
+                    <div class="bg-white p-5 rounded-xl shadow lg:col-span-1">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-700">Live CCTV (Gate 1)</h3>
+                            <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded animate-pulse">●
+                                LIVE</span>
+                        </div>
+                        <div
+                            class="bg-black rounded-lg h-48 flex items-center justify-center text-gray-500 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-slate-800 flex flex-col items-center justify-center">
+                                <i class="fa-solid fa-video-slash text-4xl mb-2"></i>
+                                <p class="text-sm">Menghubungkan ke ESP32-CAM...</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 grid grid-cols-2 gap-2">
+                            <button
+                                class="bg-blue-50 text-blue-600 py-2 rounded text-sm font-semibold hover:bg-blue-100">Buka
+                                Gate</button>
+                            <button
+                                class="bg-red-50 text-red-600 py-2 rounded text-sm font-semibold hover:bg-red-100">Alarm</button>
+                        </div>
+                    </div>
+                    <!-- diagram statistik -->
+                    <div class="bg-white p-5 rounded-xl shadow lg:col-span-2">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-700">Statistik Kendaraan Masuk (Mingguan)</h3>
+                            <select class="text-xs border rounded p-1 bg-gray-50">
+                                <option>Minggu Ini</option>
+                                <option>Bulan Ini</option>
+                            </select>
+                        </div>
+                        <div class="h-64 w-full relative">
+                            <canvas id="trafficChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+
+
+                   
+
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('trafficChart').getContext('2d');
+        const trafficChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
+                datasets: [{
+                    label: 'Motor',
+                    data: [120, 190, 300, 250, 200, 90],
+                    backgroundColor: 'rgba(59, 130, 246, 0.7)' // Blue
+                },
+                {
+                    label: 'Mobil',
+                    data: [40, 60, 80, 70, 50, 20],
+                    backgroundColor: 'rgba(16, 185, 129, 0.7)' // Green
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
