@@ -62,12 +62,17 @@ def register():
         username = request.form.get("username")
         password = request.form.get("password")
         email = request.form.get("email")
+        full_name = request.form.get("full_name")  # <--- tambahkan ini
+
+        if not all([username, password, email, full_name]):
+            flash("Semua field harus diisi", "error")
+            return render_template("register.html")
 
         if ParkirModel.check_username_exists(username):
             flash("Username sudah digunakan", "error")
             return render_template("register.html")
 
-        success = ParkirModel.register_user(username, password, email)
+        success = ParkirModel.register_user(username, password, email, full_name)
         if success:
             flash("Registrasi berhasil! Silakan login", "success")
             return redirect(url_for("dashboard.login"))

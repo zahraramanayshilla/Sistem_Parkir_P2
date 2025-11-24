@@ -1,19 +1,26 @@
 from app import db
+from sqlalchemy import text
 
 
 class ParkirModel:
     @staticmethod
     def check_username_exists(username):
+        """Cek apakah username sudah terdaftar"""
         result = db.session.execute(
-            "SELECT id FROM users WHERE username = :username", {"username": username}
+            text("SELECT id FROM users WHERE username = :username"),
+            {"username": username},
         ).fetchone()
         return result is not None
 
     @staticmethod
     def register_user(username, password, email, full_name):
+        """Tambah user baru ke database"""
         try:
             db.session.execute(
-                "INSERT INTO users (username, password, email, full_name) VALUES (:username, :password, :email, :full_name)",
+                text(
+                    "INSERT INTO users (username, password, email, full_name) "
+                    "VALUES (:username, :password, :email, :full_name)"
+                ),
                 {
                     "username": username,
                     "password": password,
@@ -30,8 +37,11 @@ class ParkirModel:
 
     @staticmethod
     def validate_login(username, password):
+        """Validasi login"""
         user = db.session.execute(
-            "SELECT * FROM users WHERE username = :username AND password = :password",
+            text(
+                "SELECT * FROM users WHERE username = :username AND password = :password"
+            ),
             {"username": username, "password": password},
         ).fetchone()
         if user:
