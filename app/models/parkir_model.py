@@ -5,7 +5,6 @@ from sqlalchemy import text
 class ParkirModel:
     @staticmethod
     def check_username_exists(username):
-        """Cek apakah username sudah terdaftar"""
         result = db.session.execute(
             text("SELECT id FROM users WHERE username = :username"),
             {"username": username},
@@ -14,7 +13,6 @@ class ParkirModel:
 
     @staticmethod
     def register_user(username, password, email, full_name):
-        """Tambah user baru ke database"""
         try:
             db.session.execute(
                 text(
@@ -37,7 +35,6 @@ class ParkirModel:
 
     @staticmethod
     def validate_login(username, password):
-        """Validasi login"""
         user = db.session.execute(
             text(
                 "SELECT * FROM users WHERE username = :username AND password = :password"

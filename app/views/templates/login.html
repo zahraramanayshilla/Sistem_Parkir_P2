@@ -5,59 +5,88 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <title>Login – Sistem Parkir Kampus</title>
+    <title>Login & Register – Sistem Parkir Kampus</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-blue-50">
     <div class="w-full max-w-md p-6 bg-white/80 backdrop-blur-md rounded-2xl shadow-card border border-blue-100">
-
         <!-- Judul -->
-        <div class="text-center mb-4">
+        <div class="text-center">
             <h1 class="text-3xl font-extrabold text-blue-900">KampusParkir</h1>
             <p class="text-sm text-slate-500 mt-1">Sistem Parkir Kampus – QR KTM Terintegrasi</p>
         </div>
 
         <!-- Flash Messages -->
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
+        {% for category, message in messages %}
         <div class="bg-red-100 text-red-600 px-4 py-3 rounded mb-4">
-            {{ messages[0] }}
+            {{ message }}
         </div>
+        {% endfor %}
         {% endif %}
         {% endwith %}
 
         <!-- Tabs -->
         <div class="flex justify-between mb-6 mt-5 border border-blue-200 rounded-xl overflow-hidden shadow-sm">
-            <a href="/login" class="flex-1 py-2 px-4 font-semibold rounded-l-xl text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-200 hover:shadow-md transition text-center
-               {% if request.path == '/login' %} bg-blue-100 {% endif %}">
+            <a href="{{ url_for('dashboard.login') }}" class="flex-1 py-2 px-4 font-semibold rounded-l-xl text-center 
+               {% if request.path == '/login' %}bg-blue-200 text-white{% else %}text-blue-900/90{% endif %}">
                 Login
             </a>
-            <a href="/register" class="flex-1 py-2 px-4 font-semibold rounded-r-xl text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition text-center
-               {% if request.path == '/register' %} bg-blue-100 {% endif %}">
+            <a href="{{ url_for('dashboard.register') }}" class="flex-1 py-2 px-4 font-semibold rounded-r-xl text-center 
+               {% if request.path == '/register' %}bg-blue-200 text-white{% else %}text-blue-900/90{% endif %}">
                 Register
             </a>
         </div>
 
-        <!-- Form Login -->
-        <form method="POST" action="/login" class="space-y-4">
+        <!-- Form -->
+        {% if request.path == '/login' %}
+        <form method="POST" action="{{ url_for('dashboard.login') }}" class="space-y-4">
             <div>
                 <label class="block text-sm font-medium text-blue-900">Username</label>
                 <input type="text" name="username" placeholder="Masukkan username"
-                    class="mt-1 w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 bg-white shadow-inner"
-                    required>
+                    class="mt-1 w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 bg-white shadow-inner" />
             </div>
             <div>
                 <label class="block text-sm font-medium text-blue-900">Password</label>
                 <input type="password" name="password" placeholder="Masukkan password"
-                    class="mt-1 w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 bg-white shadow-inner"
-                    required>
+                    class="mt-1 w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 bg-white shadow-inner" />
             </div>
             <button type="submit"
-                class="w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition">Login</button>
+                class="w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition">
+                Login
+            </button>
         </form>
+        {% elif request.path == '/register' %}
+        <form method="POST" action="{{ url_for('dashboard.register') }}" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-blue-900">Nama Lengkap</label>
+                <input type="text" name="full_name" placeholder="Masukkan nama lengkap"
+                    class="mt-1 w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 bg-white shadow-inner" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-blue-900">Username</label>
+                <input type="text" name="username" placeholder="Masukkan username"
+                    class="mt-1 w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 bg-white shadow-inner" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-blue-900">Email</label>
+                <input type="email" name="email" placeholder="Masukkan email"
+                    class="mt-1 w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 bg-white shadow-inner" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-blue-900">Password</label>
+                <input type="password" name="password" placeholder="Masukkan password"
+                    class="mt-1 w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 bg-white shadow-inner" />
+            </div>
+            <button type="submit"
+                class="w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition">
+                Register
+            </button>
+        </form>
+        {% endif %}
 
-        <!-- Footer -->
         <p class="mt-4 text-sm text-slate-500 text-center">© 2025 KampusParkir • Sistem QR</p>
     </div>
 </body>
