@@ -1,13 +1,25 @@
 # app/controllers/dashboard_controller.py
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from app.models.parkir_model import ParkirModel
+from functools import wraps
+from flask import session, redirect, url_for, flash
 
-dashboard_bp = Blueprint("dashboard", __name__)
 
-
-# ==================== DECORATOR LOGIN ====================
 def login_required(f):
-    """Decorator untuk memastikan user sudah login"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "user_id" not in session:
+            flash("Silakan login terlebih dahulu.", "error")
+            return redirect(url_for("dashboard.login"))
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
+dashboard_bp = Blueprint("dashboard", __name__, url_prefix="")
+
+
+def login_required(f):
     from functools import wraps
 
     @wraps(f)
@@ -20,28 +32,23 @@ def login_required(f):
     return decorated_function
 
 
-# ==================== INDEX DASHBOARD ====================
 @dashboard_bp.route("/")
 @login_required
 def index():
-    """Halaman utama dashboard"""
     return render_template("index.html")
 
 
-# ==================== LOGIN ====================
 @dashboard_bp.route("/login", methods=["GET", "POST"])
 def login():
-    """Halaman dan proses login"""
     if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
 
         if not username or not password:
             flash("Username dan password harus diisi", "error")
             return render_template("login.html")
 
         user = ParkirModel.validate_login(username, password)
-
         if user:
             session["user_id"] = user["id"]
             session["username"] = user["username"]
@@ -55,38 +62,51 @@ def login():
     return render_template("login.html")
 
 
-# ==================== REGISTER ====================
 @dashboard_bp.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
-        email = request.form.get("email")
-        full_name = request.form.get("full_name")  # <--- tambahkan ini
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
+        confirm_password = request.form.get("confirm_password", "")
+        email = request.form.get("email", "").strip()
 
-        if not all([username, password, email, full_name]):
+        # cek semua field wajib diisi
+        if not all([username, password, confirm_password, email]):
             flash("Semua field harus diisi", "error")
             return render_template("register.html")
 
-        if ParkirModel.check_username_exists(username):
+        # cek password cocok
+        if password != confirm_password:
+            flash("Password dan konfirmasi password tidak cocok", "error")
+            return render_template("register.html")
+
+        # cek username sudah ada
+        from app.models.db_models import User
+        from app import db
+
+        if User.query.filter_by(username=username).first():
             flash("Username sudah digunakan", "error")
             return render_template("register.html")
 
-        success = ParkirModel.register_user(username, password, email, full_name)
-        if success:
+        # buat user baru
+        new_user = User(
+            username=username, email=email, password=password
+        )
+        try:
+            db.session.add(new_user)
+            db.session.commit()
             flash("Registrasi berhasil! Silakan login", "success")
             return redirect(url_for("dashboard.login"))
-        else:
-            flash("Registrasi gagal", "error")
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Registrasi gagal: {e}", "error")
             return render_template("register.html")
 
     return render_template("register.html")
 
 
-# ==================== LOGOUT ====================
 @dashboard_bp.route("/logout")
 def logout():
-    """Logout user dan hapus session"""
     session.clear()
     flash("Anda telah logout", "info")
     return redirect(url_for("dashboard.login"))

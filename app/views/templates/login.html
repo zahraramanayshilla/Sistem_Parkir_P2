@@ -45,12 +45,12 @@
         <form method="POST" action="{{ url_for('dashboard.login') }}" class="space-y-4">
             <div>
                 <label class="block text-sm font-medium text-blue-900">Username</label>
-                <input type="text" name="username" placeholder="Masukkan username"
+            <input type="text" name="username" placeholder="Masukkan username" required 
                     class="mt-1 w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 bg-white shadow-inner" />
             </div>
             <div>
                 <label class="block text-sm font-medium text-blue-900">Password</label>
-                <input type="password" name="password" placeholder="Masukkan password"
+            <input type="password" name="password" placeholder="Masukkan password" required 
                     class="mt-1 w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 bg-white shadow-inner" />
             </div>
             <button type="submit"

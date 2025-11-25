@@ -314,10 +314,11 @@
                   AB
                 </div>
                 <p class="text-slate-500 text-center">Informasi akun pengguna/admin yang sedang login.</p>
-                <button type="button"
-                  class="w-36 py-2 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
-                  Logout
-                </button>
+              <a href="{{ url_for('dashboard.logout') }}"
+                class="w-36 py-2 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors duration-300 transform hover:-translate-y-0.5 hover:shadow-lg text-center block">
+                Logout
+              </a>
+
               </div>
             </div>
           </article>

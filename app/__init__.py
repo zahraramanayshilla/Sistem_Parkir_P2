@@ -1,21 +1,31 @@
+# app/__init__.py
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
-db = SQLAlchemy()  # hanya satu instance db
+db = SQLAlchemy()
+migrate = Migrate()
 
 
-def create_app():
-    app = Flask(__name__, template_folder="app/views/templates")
-    app.config["SECRET_KEY"] = "your-secret-key-here"
-    app.config["SQLALCHEMY_DATABASE_URI"] = (
-        "postgresql://postgres:Zahra123.@localhost:5432/sistem_parkir"
+def create_app(config_object=None):
+    app = Flask(
+        __name__, template_folder="views/templates", static_folder="views/static"
     )
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    # bind db ke app
+    # konfigurasi
+    if config_object is None:
+        from app.config import Config
+
+        app.config.from_object(Config)
+    else:
+        app.config.from_object(config_object)
+
+    # init extensions
     db.init_app(app)
+    migrate.init_app(app, db)
 
-    # register blueprint
+    # register blueprints
     from app.controllers.dashboard_controller import dashboard_bp
 
     app.register_blueprint(dashboard_bp)
