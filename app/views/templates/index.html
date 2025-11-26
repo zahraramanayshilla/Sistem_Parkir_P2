@@ -51,22 +51,22 @@
           <ul
             class="bg-blue-50 md:bg-transparent border md:border-none border-blue-100 rounded-xl md:rounded-full p-3 md:p-1 flex flex-col md:flex-row gap-2 md:gap-1 text-sm font-semibold">
 
-            <li><a data-tab href="#dashboard"
+            <li><a data-tab href="{{ url_for('dashboard.index') }}"
                 class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
                 <i class='bx bx-home-smile text-lg'></i>
                 <span>Dashboard</span></a></li>
 
-            <li><a data-tab href="#riwayat"
+            <li><a data-tab href="{{ url_for('dashboard.riwayat') }}"
                 class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
                 <i class='bx bx-time text-lg'></i>
                 <span>Riwayat</span></a></li>
 
-            <li><a data-tab href="#masuk"
+            <li><a data-tab href="{{ url_for('dashboard.monitoring') }}"
                 class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
                 <i class='bx bx-video text-lg'></i>
                 <span>Monitoring</span></a></li>
 
-            <li><a data-tab href="#userprofile"
+          <li><a data-tab href="{{ url_for('dashboard.profile') }}"
                 class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
                 <i class='bx bx-user text-lg'></i>
                 <span>Profile</span></a></li>
@@ -77,7 +77,7 @@
                 class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">3</span>
             </button>
 
-            <li><a data-tab href="#pengaturan"
+            <li><a data-tab href="{{ url_for('dashboard.pengaturan') }}"
                 class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
                 <i class='bx bx-cog text-lg'></i>
                 <span>Pengaturan</span></a></li>
@@ -91,7 +91,7 @@
 
     <main class="mt-4 grid gap-4">
       <!-- ============== DASHBOARD ============== -->
-      <section id="dashboard" data-view class="view">
+      <section>
         <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <!-- Stat Card -->
           <article
@@ -235,352 +235,6 @@
         </article>
       </section>
 
-      <!-- ============== MASUK ============== -->
-      <section id="masuk" data-view class="view hidden">
-        <div class="grid gap-4 lg:grid-cols-2">
-          <article
-            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
-            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-2" id="masuk-title"> Scan QR —
-              Gerbang
-              Masuk</div>
-            <!-- cctv -->
-            <div class="bg-white p-5 rounded-xl shadow lg:col-span-1">
-              <div class="flex justify-between items-center mb-4">
-                <h3 class="font-bold text-gray-700">Live CCTV (Gate 1)</h3>
-                <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded animate-pulse">●
-                  LIVE</span>
-              </div>
-              <div
-                class="bg-black rounded-lg h-48 flex items-center justify-center text-gray-500 relative overflow-hidden">
-                <div class="absolute inset-0 bg-slate-800 flex flex-col items-center justify-center">
-                  <i class="fa-solid fa-video-slash text-4xl mb-2"></i>
-                  <p class="text-sm">Menghubungkan ke ESP32-CAM...</p>
-                </div>
-              </div>
-              <div class="mt-4 grid grid-cols-2 gap-2">
-                <button class="bg-blue-50 text-blue-600 py-2 rounded text-sm font-semibold hover:bg-blue-100">Buka
-                  Gate</button>
-                <button
-                  class="bg-red-50 text-red-600 py-2 rounded text-sm font-semibold hover:bg-red-100">Alarm</button>
-              </div>
-            </div>
-          </article>
-          <article
-            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
-            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3">Detail Kendaraan (Opsional)
-            </div>
-            <div class="grid gap-3 md:grid-cols-2"> <label class="grid gap-2"> <span
-                  class="text-[13px] font-bold text-blue-900">NPM / ID Pengguna</span> <input type="text"
-                  placeholder="Contoh: 21.11.1234"
-                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
-              </label> <label class="grid gap-2"> <span class="text-[13px] font-bold text-blue-900">Nomor Polisi</span>
-                <input type="text" placeholder="D 1234 GIL"
-                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
-              </label> <label class="grid gap-2"> <span class="text-[13px] font-bold text-blue-900">Jenis
-                  Kendaraan</span>
-                <select
-                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                  <option>Motor</option>
-                  <option>Mobil</option>
-                  <option>Lainnya</option>
-                </select> </label> <label class="grid gap-2"> <span class="text-[13px] font-bold text-blue-900">Area
-                  Parkir</span> <select
-                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                  <option>Gerbang Utama</option>
-                  <option>Gedung A</option>
-                  <option>Gedung B</option>
-                  <option>Basement</option>
-                </select> </label> </div>
-            <div class="mt-4 flex gap-2"> <button type="button" class="btn-primary">Simpan Masuk</button> <a
-                href="#dashboard" class="btn-secondary">Kembali ke Dashboard</a> </div>
-          </article>
-        </div>
-      </section>
-
-      <!-- ============== USER PROFILE ============== -->
-      <section id="userprofile" data-view class="view hidden">
-        <div class="grid gap-4 lg:grid-cols-[.9fr_1.1fr]">
-
-          <!-- Profile Info Card -->
-          <article
-            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card grid place-items-center gap-3">
-            <div class="w-full text-center">
-              <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3">Profil Pengguna — Info
-              </div>
-              <div class="flex flex-col items-center gap-3">
-                <!-- Dummy Avatar -->
-                <div
-                  class="w-28 h-28 rounded-full border border-blue-100 shadow-[0_10px_22px_rgba(30,64,175,.12)] bg-white grid place-items-center text-blue-600 font-bold text-2xl">
-                  AB
-                </div>
-                <p class="text-slate-500 text-center">Informasi akun pengguna/admin yang sedang login.</p>
-              <a href="{{ url_for('dashboard.logout') }}"
-                class="w-36 py-2 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors duration-300 transform hover:-translate-y-0.5 hover:shadow-lg text-center block">
-                Logout
-              </a>
-
-              </div>
-            </div>
-          </article>
-
-          <!-- Edit Profile Card -->
-          <article
-            class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
-            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3">Edit Profil Pengguna</div>
-            <form id="profileForm" class="grid gap-3 md:grid-cols-2">
-              <label class="grid gap-2">
-                <span class="text-[13px] font-bold text-blue-900">Nama Lengkap</span>
-                <input type="text" value="Admin User"
-                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
-              </label>
-              <label class="grid gap-2">
-                <span class="text-[13px] font-bold text-blue-900">Email</span>
-                <input type="email" value="admin@kampusparkir.com"
-                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
-              </label>
-              <label class="grid gap-2">
-                <span class="text-[13px] font-bold text-blue-900">Role</span>
-                <select
-                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                  <option>Admin</option>
-                  <option>Petugas</option>
-                  <option>Mahasiswa</option>
-                </select>
-              </label>
-              <label class="grid gap-2">
-                <span class="text-[13px] font-bold text-blue-900">Status Akun</span>
-                <select
-                  class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                  <option>Aktif</option>
-                  <option>Nonaktif</option>
-                </select>
-              </label>
-            </form>
-
-            <div class="mt-4 flex gap-2">
-              <button type="submit"
-                class="w-36 py-2 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-colors duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">Simpan
-                Perubahan</button>
-              <a href="#dashboard" class="btn-secondary w-36 py-2 text-center">Kembali</a>
-            </div>
-          </article>
-
-          <!-- TABEL PENGUNA -->
-
-        </div>
-        <article class="bg-white border border-blue-100 rounded-[18px] shadow-card mt-5">
-          <div class="px-5 pt-5 pb-3 text-[13px] font-bold uppercase tracking-wide text-slate-500" id="pengguna-title">
-            Daftar Pengguna
-          </div>
-
-          <div class="overflow-auto rounded-b-[18px] border-t border-blue-100/60">
-            <table class="w-full text-sm">
-              <thead class="sticky top-0 z-[1] bg-gradient-to-b from-blue-50 to-white text-blue-900">
-                <tr>
-                  <th class="text-left px-3 py-3">No</th>
-                  <th class="text-left px-3 py-3">Nama</th>
-                  <th class="text-left px-3 py-3">NPM / ID</th>
-                  <th class="text-left px-3 py-3">Program Studi</th>
-                  <th class="text-left px-3 py-3">Nomor Polisi</th>
-                  <th class="text-left px-3 py-3">Status</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
-                  <td class="px-3 py-3 border-t border-blue-100">1</td>
-                  <td class="px-3 py-3 border-t border-blue-100">Zahra Sabila</td>
-                  <td class="px-3 py-3 border-t border-blue-100">21.11.1234</td>
-                  <td class="px-3 py-3 border-t border-blue-100">Teknik Informatika</td>
-                  <td class="px-3 py-3 border-t border-blue-100">D 1234 GIL</td>
-                  <td class="px-3 py-3 border-t border-blue-100 text-green-600 font-semibold">Aktif</td>
-                </tr>
-
-                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
-                  <td class="px-3 py-3 border-t border-blue-100">2</td>
-                  <td class="px-3 py-3 border-t border-blue-100">Ramanayshilla</td>
-                  <td class="px-3 py-3 border-t border-blue-100">22.22.5678</td>
-                  <td class="px-3 py-3 border-t border-blue-100">Sistem Informasi</td>
-                  <td class="px-3 py-3 border-t border-blue-100">D 5678 ULB</td>
-                  <td class="px-3 py-3 border-t border-blue-100 text-green-600 font-semibold">Aktif</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </article>
-
-      </section>
-
-      <!-- ============== RIWAYAT ============== -->
-      <section id="riwayat" data-view class="view hidden">
-        <article class="bg-white border border-blue-100 rounded-[18px] shadow-card">
-          <div class="px-5 pt-5 pb-3 text-[13px] font-bold uppercase tracking-wide text-slate-500" id="riwayat-title">
-            Riwayat Hari Ini</div>
-          <div class="overflow-auto rounded-b-[18px] border-t border-blue-100/60">
-            <table class="w-full text-sm">
-              <thead class="sticky top-0 z-[1] bg-gradient-to-b from-blue-50 to-white text-blue-900">
-                <tr>
-                  <th class="text-left px-3 py-3">Waktu</th>
-                  <th class="text-left px-3 py-3">Jenis</th>
-                  <th class="text-left px-3 py-3">NPM / ID</th>
-                  <th class="text-left px-3 py-3">Nomor Polisi</th>
-                  <th class="text-left px-3 py-3">Area</th>
-                  <th class="text-left px-3 py-3">Durasi</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
-                  <td class="px-3 py-3 border-t border-blue-100">07:42</td>
-                  <td class="px-3 py-3 border-t border-blue-100">Masuk</td>
-                  <td class="px-3 py-3 border-t border-blue-100">21.11.1234</td>
-                  <td class="px-3 py-3 border-t border-blue-100">D 1234 GIL</td>
-                  <td class="px-3 py-3 border-t border-blue-100">Gerbang Utama</td>
-                  <td class="px-3 py-3 border-t border-blue-100">—</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
-                  <td class="px-3 py-3 border-t border-blue-100">08:05</td>
-                  <td class="px-3 py-3 border-t border-blue-100">Masuk</td>
-                  <td class="px-3 py-3 border-t border-blue-100">22.22.5678</td>
-                  <td class="px-3 py-3 border-t border-blue-100">D 5678 ULB</td>
-                  <td class="px-3 py-3 border-t border-blue-100">Gedung A</td>
-                  <td class="px-3 py-3 border-t border-blue-100">—</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
-                  <td class="px-3 py-3 border-t border-blue-100">10:13</td>
-                  <td class="px-3 py-3 border-t border-blue-100">Keluar</td>
-                  <td class="px-3 py-3 border-t border-blue-100">21.11.1234</td>
-                  <td class="px-3 py-3 border-t border-blue-100">D 1234 GIL</td>
-                  <td class="px-3 py-3 border-t border-blue-100">Gerbang Utama</td>
-                  <td class="px-3 py-3 border-t border-blue-100">2j 31m</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </article>
-      </section>
-
-    <!-- ============== PENGATURAN ============== -->
-    <section id="pengaturan" data-view class="view hidden">
-      <div class="grid gap-4 lg:grid-cols-2">
-    
-        <!-- ===================== PENGATURAN SISTEM ===================== -->
-        <article class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
-          <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3" id="pengaturan-title">
-            Pengaturan Sistem
-          </div>
-    
-          <div class="grid gap-3 md:grid-cols-2">
-    
-            <!-- Jumlah Slot -->
-            <label class="grid gap-2">
-              <span class="text-[13px] font-bold text-blue-900">Jumlah Slot Total</span>
-              <input type="number" placeholder="Mis. 250" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
-            </label>
-
-            <!-- Zona Parkir -->
-            <label class="grid gap-2">
-              <span class="text-[13px] font-bold text-blue-900">Zona Parkir</span>
-              <select class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                <option>Gedung A</option>
-                <option>Perpustakaan</option>
-                <option>Basement</option>
-                <option>Gerbang Timur</option>
-              </select>
-            </label>
-    
-            <!-- Mode Scan -->
-            <label class="grid gap-2">
-              <span class="text-[13px] font-bold text-blue-900">Mode Scan QR</span>
-              <select class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                  focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                <option>Otomatis</option>
-                <option>Manual — Petugas Tekan untuk Scan</option>
-              </select>
-            </label>
-    
-            <!-- Durasi QR -->
-            <label class="grid gap-2">
-              <span class="text-[13px] font-bold text-blue-900">Durasi Berlaku QR (menit)</span>
-              <input type="number" placeholder="Mis. 15" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-            </label>
-    
-            <!-- ID Perangkat ESP32 -->
-            <label class="grid gap-2">
-              <span class="text-[13px] font-bold text-blue-900">ID Perangkat ESP32</span>
-              <input type="text" placeholder="Mis. ESP32-GATE-01" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-            </label>
-    
-            <!-- Notifikasi Sistem Lanjutan -->
-            <label class="grid gap-2">
-              <span class="text-[13px] font-bold text-blue-900">Notifikasi Sistem</span>
-              <select class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                  focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                <option>Nonaktif</option>
-                <option>Slot Penuh</option>
-                <option>Perangkat Offline</option>
-                <option>Anomali Scan</option>
-              </select>
-            </label>
-    
-            <!-- Jam buka -->
-            <label class="grid gap-2">
-              <span class="text-[13px] font-bold text-blue-900">Jam Buka Parkir</span>
-              <input type="time" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
-            </label>
-    
-            <!-- Jam tutup -->
-            <label class="grid gap-2">
-              <span class="text-[13px] font-bold text-blue-900">Jam Tutup Parkir</span>
-              <input type="time" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
-            </label>
-    
-            <!-- Mode Emergency -->
-            <label class="grid gap-2">
-              <span class="text-[13px] font-bold text-blue-900">Mode Emergency</span>
-              <select class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                  focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                <option>Nonaktif</option>
-                <option>Force Open Gate</option>
-                <option>Bypass QR</option>
-                <option>Mode Evakuasi</option>
-              </select>
-            </label>
-    
-            <!-- Backup Database -->
-            <label class="grid gap-2 col-span-2">
-              <span class="text-[13px] font-bold text-blue-900">Backup Database</span>
-              <button type="button" class="btn-secondary w-full text-left px-4 py-3 rounded-xl">Download Backup</button>
-            </label>
-    
-          </div>
-    
-          <div class="mt-4 flex gap-2">
-            <button type="button" class="btn-primary">Simpan Pengaturan</button>
-            <a href="#dashboard" class="btn-secondary">Kembali</a>
-          </div>
-        </article>
-    
-        <!-- ===================== INFORMASI ===================== -->
-        <article class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
-          <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-2">Informasi</div>
-          <p class="text-slate-500">Informasi tentang sistem parkir kampus:</p>
-          <ul class="text-slate-500 list-disc pl-5 mt-2 space-y-1">
-            <li>Sistem terintegrasi dengan IoT ESP32 dan QR Code.</li>
-            <li>Mendukung beberapa zona parkir kampus.</li>
-            <li>Dilengkapi fitur keamanan & mode emergency.</li>
-            <li>Dilengkapi notifikasi status perangkat & slot.</li>
-            <li>Pengaturan dapat disesuaikan sesuai kebutuhan kampus.</li>
-          </ul>
-        </article>
-    
-      </div>
-    </section>
 
     </main>
 

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="../static/image/ulbi.png" type="image/png">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Sistem Parkir ULBI</title>
+    <!-- Tailwind CDN (no build step) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body
+    class="min-h-dvh text-slate-900 [background:radial-gradient(1200px_800px_at_20%-10%,#eff6ff,transparent_60%),_radial-gradient(900px_600px_at_110%-20%,#e8f0ff,transparent_55%),_#f7faff]">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" id="app">
+
+        <!-- HEADER -->
+        <header
+            class="sticky top-0 z-20 bg-gradient-to-br from-white to-blue-50 border border-blue-100 rounded-[18px] px-4 sm:px-6 py-3 shadow-card backdrop-blur-md saturate-125">
+
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+                <!-- Brand -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl grid place-items-center text-white shadow-lg">
+                            <img src="../static/image/ulbi.png" alt="">
+                        </div>
+                        <div>
+                            <h1 class="text-[clamp(18px,2.1vw,22px)] tracking-wide font-semibold">
+                                ULBIParkir • Sistem QR
+                            </h1>
+                            <p class="text-xs text-slate-500 mt-0.5">Pengelolaan parkir kampus cepat, aman,
+                                terintegrasi.</p>
+                        </div>
+                    </div>
+
+                    <!-- Tombol Burger (Checkbox Hack) -->
+                    <label for="menu-toggle" class="md:hidden text-blue-900 text-3xl cursor-pointer">
+                        <i class="bx bx-menu-alt-right"></i>
+                    </label>
+                </div>
+
+                <!-- Checkbox Hidden -->
+                <input type="checkbox" id="menu-toggle" class="peer hidden">
+
+                <!-- Navigasi -->
+                <nav class="max-md:hidden peer-checked:max-md:block">
+                    <ul
+                        class="bg-blue-50 md:bg-transparent border md:border-none border-blue-100 rounded-xl md:rounded-full p-3 md:p-1 flex flex-col md:flex-row gap-2 md:gap-1 text-sm font-semibold">
+
+                        <li><a data-tab href="{{ url_for('dashboard.index') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                <i class='bx bx-home-smile text-lg'></i>
+                                <span>Dashboard</span></a></li>
+
+                        <li><a data-tab href="{{ url_for('dashboard.riwayat') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                <i class='bx bx-time text-lg'></i>
+                                <span>Riwayat</span></a></li>
+
+                        <li><a data-tab href="{{ url_for('dashboard.monitoring') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                <i class='bx bx-video text-lg'></i>
+                                <span>Monitoring</span></a></li>
+
+                        <li><a data-tab href="{{ url_for('dashboard.profile') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                <i class='bx bx-user text-lg'></i>
+                                <span>Profile</span></a></li>
+
+                        <button
+                            class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2 relative text-gray-600 hover:text-blue-600">
+                            <i class='bx bxs-bell text-lg'></i>
+                            <span
+                                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                        </button>
+
+                        <li><a data-tab href="{{ url_for('dashboard.pengaturan') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                <i class='bx bx-cog text-lg'></i>
+                                <span>Pengaturan</span></a></li>
+
+                    </ul>
+                </nav>
+
+            </div>
+        </header>
+
+
+        <main class="mt-4 grid gap-4">
+
+            <!-- ============== USER PROFILE ============== -->
+            <section>
+                <div class="grid gap-4 lg:grid-cols-[.9fr_1.1fr]">
+
+                    <!-- Profile Info Card -->
+                    <article
+                        class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card grid place-items-center gap-3">
+                        <div class="w-full text-center">
+                            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3">Profil
+                                Pengguna — Info
+                            </div>
+                            <div class="flex flex-col items-center gap-3">
+                                <!-- Dummy Avatar -->
+                                <div
+                                    class="w-28 h-28 rounded-full border border-blue-100 shadow-[0_10px_22px_rgba(30,64,175,.12)] bg-white grid place-items-center text-blue-600 font-bold text-2xl">
+                                    AB
+                                </div>
+                                <p class="text-slate-500 text-center">Informasi akun pengguna/admin yang sedang login.
+                                </p>
+                                <a href="{{ url_for('dashboard.logout') }}"
+                                    class="w-36 py-2 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors duration-300 transform hover:-translate-y-0.5 hover:shadow-lg text-center block">
+                                    Logout
+                                </a>
+
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Edit Profile Card -->
+                    <article
+                        class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+                        <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3">Edit Profil
+                            Pengguna</div>
+                        <form id="profileForm" class="grid gap-3 md:grid-cols-2">
+                            <label class="grid gap-2">
+                                <span class="text-[13px] font-bold text-blue-900">Nama Lengkap</span>
+                                <input type="text" value="Admin User"
+                                    class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+                            </label>
+                            <label class="grid gap-2">
+                                <span class="text-[13px] font-bold text-blue-900">Email</span>
+                                <input type="email" value="admin@kampusparkir.com"
+                                    class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+                            </label>
+                            <label class="grid gap-2">
+                                <span class="text-[13px] font-bold text-blue-900">Role</span>
+                                <select
+                                    class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                                    <option>Admin</option>
+                                    <option>Petugas</option>
+                                    <option>Mahasiswa</option>
+                                </select>
+                            </label>
+                            <label class="grid gap-2">
+                                <span class="text-[13px] font-bold text-blue-900">Status Akun</span>
+                                <select
+                                    class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                                    <option>Aktif</option>
+                                    <option>Nonaktif</option>
+                                </select>
+                            </label>
+                        </form>
+
+                        <div class="mt-4 flex gap-2">
+                            <button type="submit"
+                                class="w-36 py-2 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-colors duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">Simpan
+                                Perubahan</button>
+                            <a href="#dashboard" class="btn-secondary w-36 py-2 text-center">Kembali</a>
+                        </div>
+                    </article>
+
+                    <!-- TABEL PENGUNA -->
+
+                </div>
+                <article class="bg-white border border-blue-100 rounded-[18px] shadow-card mt-5">
+                    <div class="px-5 pt-5 pb-3 text-[13px] font-bold uppercase tracking-wide text-slate-500"
+                        id="pengguna-title">
+                        Daftar Pengguna
+                    </div>
+
+                    <div class="overflow-auto rounded-b-[18px] border-t border-blue-100/60">
+                        <table class="w-full text-sm">
+                            <thead class="sticky top-0 z-[1] bg-gradient-to-b from-blue-50 to-white text-blue-900">
+                                <tr>
+                                    <th class="text-left px-3 py-3">No</th>
+                                    <th class="text-left px-3 py-3">Nama</th>
+                                    <th class="text-left px-3 py-3">Email</th>
+                                    <th class="text-left px-3 py-3">role</th>
+                                    <th class="text-left px-3 py-3">Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for user in users %}
+                                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
+                                    <td class="px-3 py-3 border-t border-blue-100">{{user.id}}</td>
+                                    <td class="px-3 py-3 border-t border-blue-100">{{ user.username }}</td>
+                                    <td class="px-3 py-3 border-t border-blue-100">{{ user.email }}</td>
+                                    <td class="px-3 py-3 border-t border-blue-100">{{ user.role }}</td>
+                                    <td class="px-3 py-3 border-t border-blue-100 flex gap-2">
+
+                                        <!-- EDIT BUTTON -->
+                                        <a href=""
+                                            class="px-3 py-1 rounded-md bg-blue-500 text-white text-xs font-semibold hover:bg-blue-600 transition">
+                                            Edit
+                                        </a>
+
+                                        <!-- DELETE BUTTON -->
+                                        <a href=""
+                                            onclick="return confirm('Yakin ingin menghapus user ini?');"
+                                            class="px-3 py-1 rounded-md bg-red-500 text-white text-xs font-semibold hover:bg-red-600 transition">
+                                            Hapus
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+
+</html>
