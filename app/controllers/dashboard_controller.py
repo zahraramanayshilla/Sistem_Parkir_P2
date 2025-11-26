@@ -1,9 +1,9 @@
-# app/controllers/dashboard_controller.py
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from app.models.parkir_model import ParkirModel
 from functools import wraps
 from flask import session, redirect, url_for, flash
 
+dashboard_bp = Blueprint("dashboard", __name__, url_prefix="")
 
 def login_required(f):
     @wraps(f)
@@ -14,9 +14,6 @@ def login_required(f):
         return f(*args, **kwargs)
 
     return decorated_function
-
-
-dashboard_bp = Blueprint("dashboard", __name__, url_prefix="")
 
 
 def login_required(f):
@@ -30,12 +27,6 @@ def login_required(f):
         return f(*args, **kwargs)
 
     return decorated_function
-
-
-@dashboard_bp.route("/")
-@login_required
-def index():
-    return render_template("index.html")
 
 
 @dashboard_bp.route("/login", methods=["GET", "POST"])
@@ -110,3 +101,45 @@ def logout():
     session.clear()
     flash("Anda telah logout", "info")
     return redirect(url_for("dashboard.login"))
+
+# ============================
+# HALAMAN DASHBOARD
+# ============================
+@dashboard_bp.route("/")
+@login_required
+def index():
+    return render_template("index.html")
+# ============================
+# HALAMAN RIWAYAT
+# ============================
+@dashboard_bp.route("/riwayat")
+@login_required
+def riwayat():
+    return render_template("riwayat.html")
+
+
+# ============================
+# HALAMAN MONITORING
+# ============================
+@dashboard_bp.route("/monitoring")
+@login_required
+def monitoring():
+    return render_template("monitoring.html")
+
+# ============================
+# HALAMAN PENGATURAN
+# ============================
+@dashboard_bp.route("/pengaturan")
+@login_required
+def pengaturan():
+    return render_template("pengaturan.html")
+
+
+# ============================
+# HALAMAN PROFILE
+# ============================
+@dashboard_bp.route("/profile")
+@login_required
+def profile():
+    users = ParkirModel.get_all_users()  # jika ingin menampilkan data pengguna
+    return render_template("profile.html", users=users)

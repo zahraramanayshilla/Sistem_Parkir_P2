@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="../static/image/ulbi.png" type="image/png">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Sistem Parkir ULBI</title>
+    <!-- Tailwind CDN (no build step) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body
+    class="min-h-dvh text-slate-900 [background:radial-gradient(1200px_800px_at_20%-10%,#eff6ff,transparent_60%),_radial-gradient(900px_600px_at_110%-20%,#e8f0ff,transparent_55%),_#f7faff]">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" id="app">
+
+        <!-- HEADER -->
+        <header
+            class="sticky top-0 z-20 bg-gradient-to-br from-white to-blue-50 border border-blue-100 rounded-[18px] px-4 sm:px-6 py-3 shadow-card backdrop-blur-md saturate-125">
+
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+                <!-- Brand -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl grid place-items-center text-white shadow-lg">
+                            <img src="../static/image/ulbi.png" alt="">
+                        </div>
+                        <div>
+                            <h1 class="text-[clamp(18px,2.1vw,22px)] tracking-wide font-semibold">
+                                ULBIParkir • Sistem QR
+                            </h1>
+                            <p class="text-xs text-slate-500 mt-0.5">Pengelolaan parkir kampus cepat, aman,
+                                terintegrasi.</p>
+                        </div>
+                    </div>
+
+                    <!-- Tombol Burger (Checkbox Hack) -->
+                    <label for="menu-toggle" class="md:hidden text-blue-900 text-3xl cursor-pointer">
+                        <i class="bx bx-menu-alt-right"></i>
+                    </label>
+                </div>
+
+                <!-- Checkbox Hidden -->
+                <input type="checkbox" id="menu-toggle" class="peer hidden">
+
+                <!-- Navigasi -->
+                <nav class="max-md:hidden peer-checked:max-md:block">
+                    <ul
+                        class="bg-blue-50 md:bg-transparent border md:border-none border-blue-100 rounded-xl md:rounded-full p-3 md:p-1 flex flex-col md:flex-row gap-2 md:gap-1 text-sm font-semibold">
+
+                        <li><a data-tab href="{{ url_for('dashboard.index') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                <i class='bx bx-home-smile text-lg'></i>
+                                <span>Dashboard</span></a></li>
+
+                        <li><a data-tab href="{{ url_for('dashboard.riwayat') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                <i class='bx bx-time text-lg'></i>
+                                <span>Riwayat</span></a></li>
+
+                        <li><a data-tab href="{{ url_for('dashboard.monitoring') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                <i class='bx bx-video text-lg'></i>
+                                <span>Monitoring</span></a></li>
+
+                        <li><a data-tab href="{{ url_for('dashboard.profile') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                <i class='bx bx-user text-lg'></i>
+                                <span>Profile</span></a></li>
+
+                        <button
+                            class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2 relative text-gray-600 hover:text-blue-600">
+                            <i class='bx bxs-bell text-lg'></i>
+                            <span
+                                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                        </button>
+
+                        <li><a data-tab href="{{ url_for('dashboard.pengaturan') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                <i class='bx bx-cog text-lg'></i>
+                                <span>Pengaturan</span></a></li>
+
+                    </ul>
+                </nav>
+
+            </div>
+        </header>
+
+
+        <main class="mt-4 grid gap-4">
+
+            <!-- ============== PENGATURAN ============== -->
+            <section >
+                <div class="grid gap-4 lg:grid-cols-2">
+
+                    <!-- ===================== PENGATURAN SISTEM ===================== -->
+                    <article
+                        class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+                        <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3"
+                            id="pengaturan-title">
+                            Pengaturan Sistem
+                        </div>
+
+                        <div class="grid gap-3 md:grid-cols-2">
+
+                            <!-- Jumlah Slot -->
+                            <label class="grid gap-2">
+                                <span class="text-[13px] font-bold text-blue-900">Jumlah Slot Total</span>
+                                <input type="number" placeholder="Mis. 250" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
+                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+                            </label>
+
+                            <!-- Zona Parkir -->
+                            <label class="grid gap-2">
+                                <span class="text-[13px] font-bold text-blue-900">Zona Parkir</span>
+                                <select class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
+                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                                    <option>Gedung A</option>
+                                    <option>Perpustakaan</option>
+                                    <option>Basement</option>
+                                    <option>Gerbang Timur</option>
+                                </select>
+                            </label>
+
+                            <!-- Mode Scan -->
+                            <label class="grid gap-2">
+                                <span class="text-[13px] font-bold text-blue-900">Mode Scan QR</span>
+                                <select class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
+                  focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                                    <option>Otomatis</option>
+                                    <option>Manual — Petugas Tekan untuk Scan</option>
+                                </select>
+                            </label>
+
+                            <!-- Durasi QR -->
+                            <label class="grid gap-2">
+                                <span class="text-[13px] font-bold text-blue-900">Durasi Berlaku QR (menit)</span>
+                                <input type="number" placeholder="Mis. 15" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
+                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                            </label>
+
+                            <!-- ID Perangkat ESP32 -->
+                            <label class="grid gap-2">
+                                <span class="text-[13px] font-bold text-blue-900">ID Perangkat ESP32</span>
+                                <input type="text" placeholder="Mis. ESP32-GATE-01" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
+                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                            </label>
+
+                            <!-- Notifikasi Sistem Lanjutan -->
+                            <label class="grid gap-2">
+                                <span class="text-[13px] font-bold text-blue-900">Notifikasi Sistem</span>
+                                <select class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
+                  focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                                    <option>Nonaktif</option>
+                                    <option>Slot Penuh</option>
+                                    <option>Perangkat Offline</option>
+                                    <option>Anomali Scan</option>
+                                </select>
+                            </label>
+
+                            <!-- Jam buka -->
+                            <label class="grid gap-2">
+                                <span class="text-[13px] font-bold text-blue-900">Jam Buka Parkir</span>
+                                <input type="time" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
+                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+                            </label>
+
+                            <!-- Jam tutup -->
+                            <label class="grid gap-2">
+                                <span class="text-[13px] font-bold text-blue-900">Jam Tutup Parkir</span>
+                                <input type="time" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
+                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+                            </label>
+
+                            <!-- Mode Emergency -->
+                            <label class="grid gap-2">
+                                <span class="text-[13px] font-bold text-blue-900">Mode Emergency</span>
+                                <select class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
+                  focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
+                                    <option>Nonaktif</option>
+                                    <option>Force Open Gate</option>
+                                    <option>Bypass QR</option>
+                                    <option>Mode Evakuasi</option>
+                                </select>
+                            </label>
+
+                            <!-- Backup Database -->
+                            <label class="grid gap-2 col-span-2">
+                                <span class="text-[13px] font-bold text-blue-900">Backup Database</span>
+                                <button type="button"
+                                    class="btn-secondary w-full text-left px-4 py-3 rounded-xl">Download Backup</button>
+                            </label>
+
+                        </div>
+
+                        <div class="mt-4 flex gap-2">
+                            <button type="button" class="btn-primary">Simpan Pengaturan</button>
+                            <a href="#dashboard" class="btn-secondary">Kembali</a>
+                        </div>
+                    </article>
+
+                    <!-- ===================== INFORMASI ===================== -->
+                    <article
+                        class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
+                        <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-2">Informasi</div>
+                        <p class="text-slate-500">Informasi tentang sistem parkir kampus:</p>
+                        <ul class="text-slate-500 list-disc pl-5 mt-2 space-y-1">
+                            <li>Sistem terintegrasi dengan IoT ESP32 dan QR Code.</li>
+                            <li>Mendukung beberapa zona parkir kampus.</li>
+                            <li>Dilengkapi fitur keamanan & mode emergency.</li>
+                            <li>Dilengkapi notifikasi status perangkat & slot.</li>
+                            <li>Pengaturan dapat disesuaikan sesuai kebutuhan kampus.</li>
+                        </ul>
+                    </article>
+
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+
+</html>

@@ -21,7 +21,6 @@ class ParkirModel:
 
         return None
 
-
     # ==================== REGISTER ====================
     @staticmethod
     def register_user(full_name, username, email, password):
@@ -70,3 +69,7 @@ class ParkirModel:
     @staticmethod
     def get_user_by_id(user_id):
         return User.query.get(user_id)
+
+    @staticmethod
+    def get_all_users():
+        return User.query.order_by(User.id.asc()).all()
