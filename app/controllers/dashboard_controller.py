@@ -5,6 +5,7 @@ from flask import session, redirect, url_for, flash
 
 dashboard_bp = Blueprint("dashboard", __name__, url_prefix="")
 
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -80,9 +81,7 @@ def register():
             return render_template("register.html")
 
         # buat user baru
-        new_user = User(
-            username=username, email=email, password=password
-        )
+        new_user = User(username=username, email=email, password=password)
         try:
             db.session.add(new_user)
             db.session.commit()
@@ -102,6 +101,7 @@ def logout():
     flash("Anda telah logout", "info")
     return redirect(url_for("dashboard.login"))
 
+
 # ============================
 # HALAMAN DASHBOARD
 # ============================
@@ -109,6 +109,8 @@ def logout():
 @login_required
 def index():
     return render_template("index.html")
+
+
 # ============================
 # HALAMAN RIWAYAT
 # ============================
@@ -126,6 +128,7 @@ def riwayat():
 def monitoring():
     return render_template("monitoring.html")
 
+
 # ============================
 # HALAMAN PENGATURAN
 # ============================
@@ -141,5 +144,71 @@ def pengaturan():
 @dashboard_bp.route("/profile")
 @login_required
 def profile():
-    users = ParkirModel.get_all_users()  # jika ingin menampilkan data pengguna
-    return render_template("profile.html", users=users)
+    edit_id = request.args.get("edit_id")
+    users = ParkirModel.get_all_users()
+    user_edit = None
+
+    if edit_id:
+        from app.models.db_models import User
+
+        user_edit = User.query.get(edit_id)
+
+    return render_template("profile.html", users=users, user_edit=user_edit)
+
+
+# edit profile /user
+@dashboard_bp.route("/profile/update/<int:user_id>", methods=["POST"])
+@login_required
+def update_user(user_id):
+    from app.models.db_models import User
+    from app import db
+
+    user = User.query.get_or_404(user_id)
+
+    username = request.form.get("username", "").strip()
+    email = request.form.get("email", "").strip()
+    password = request.form.get("password", "").strip()
+
+    if not username or not email:
+        flash("Username dan email tidak boleh kosong!", "error")
+        return redirect(url_for("dashboard.profile", edit_id=user_id))
+
+    # cek username dipakai user lain
+    existing = User.query.filter(User.username == username, User.id != user_id).first()
+    if existing:
+        flash("Username sudah digunakan pengguna lain!", "error")
+        return redirect(url_for("dashboard.profile", edit_id=user_id))
+
+    user.username = username
+    user.email = email
+    if password:
+        user.password = password
+
+    try:
+        db.session.commit()
+        flash("Data berhasil diperbarui!", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Gagal memperbarui data: {e}", "error")
+
+    return redirect(url_for("dashboard.profile"))
+
+
+# delete users
+@dashboard_bp.route("/profile/delete/<int:user_id>", methods=["POST"])
+@login_required
+def delete_user(user_id):
+    from app.models.db_models import User
+    from app import db
+
+    user = User.query.get_or_404(user_id)
+
+    try:
+        db.session.delete(user)
+        db.session.commit()
+        flash("Pengguna berhasil dihapus!", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Gagal menghapus pengguna: {e}", "error")
+
+    return redirect(url_for("dashboard.profile"))
