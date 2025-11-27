@@ -73,3 +73,4 @@ class ParkirModel:
     @staticmethod
     def get_all_users():
         return User.query.order_by(User.id.asc()).all()
+
