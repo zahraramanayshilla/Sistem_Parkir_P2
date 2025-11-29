@@ -1,23 +1,34 @@
-from app import db
+# app/models/db_models.py
+from mongoengine import (
+    Document,
+    StringField,
+    EmailField,
+    DateTimeField,
+    ReferenceField,
+)
 from datetime import datetime
 
 
-class User(db.Model):
-    __tablename__ = "users"
+class User(Document):
+    meta = {
+        "collection": "users",  # nama collection di MongoDB
+    }
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(200), nullable=False)
-    role = db.Column(db.String(20), default="mahasiswa")
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    username = StringField(required=True, unique=True, max_length=100)
+    email = EmailField(required=True, unique=True, max_length=120)
+    password = StringField(required=True, max_length=200)
+    role = StringField(default="mahasiswa", max_length=20)
+    created_at = DateTimeField(default=datetime.utcnow)
 
 
-class ParkirLog(db.Model):
-    __tablename__ = "parkir_logs"
+class ParkirLog(Document):
+    meta = {
+        "collection": "parkir_logs",
+    }
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    waktu_masuk = db.Column(db.DateTime, default=datetime.utcnow)
-    waktu_keluar = db.Column(db.DateTime, nullable=True)
-    status = db.Column(db.String(20), default="masuk")
+    # relasi ke User (ganti user_id integer → ReferenceField)
+    user = ReferenceField(User, required=True)
+
+    waktu_masuk = DateTimeField(default=datetime.utcnow)
+    waktu_keluar = DateTimeField(null=True)
+    status = StringField(default="masuk", max_length=20)

@@ -1,33 +1,33 @@
 # app/__init__.py
-import os
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-
-db = SQLAlchemy()
-migrate = Migrate()
+import mongoengine
 
 
 def create_app(config_object=None):
     app = Flask(
-        __name__, template_folder="views/templates", static_folder="views/static"
+        __name__,
+        template_folder="views/templates",
+        static_folder="views/static",
     )
 
-    # konfigurasi
+    # Load config
     if config_object is None:
         from app.config import Config
-
         app.config.from_object(Config)
     else:
         app.config.from_object(config_object)
 
-    # init extensions
-    db.init_app(app)
-    migrate.init_app(app, db)
+    # Koneksi ke MongoDB
+    mongo_cfg = app.config.get("MONGODB_SETTINGS", {})
+    mongoengine.connect(
+        db=mongo_cfg.get("db", "sistem_parkir"),
+        host=mongo_cfg.get("host", "mongodb://localhost:27017/sistem_parkir"),
+        username=mongo_cfg.get("username"),
+        password=mongo_cfg.get("password"),
+    )
 
-    # register blueprints
+    # Register blueprints
     from app.controllers.dashboard_controller import dashboard_bp
-
     app.register_blueprint(dashboard_bp)
 
     return app
