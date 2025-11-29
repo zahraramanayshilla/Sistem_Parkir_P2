@@ -74,9 +74,3 @@ class ParkirModel:
 
     @staticmethod
     def get_all_users():
-<<<<<<< HEAD
-        return User.objects.order_by("created_at")
-=======
-        return User.query.order_by(User.id.asc()).all()
-
->>>>>>> origin/main
