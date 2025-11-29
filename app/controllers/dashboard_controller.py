@@ -8,6 +8,7 @@ from app.models.db_models import User
 dashboard_bp = Blueprint("dashboard", __name__, url_prefix="")
 
 
+
 # ============================
 # LOGIN REQUIRED DECORATOR
 # ============================
@@ -75,20 +76,13 @@ def register():
             flash("Username sudah digunakan", "error")
             return render_template("register.html")
 
-        if User.objects(email=email).first():
-            flash("Email sudah terdaftar", "error")
-            return render_template("register.html")
-
+        # buat user baru
+        new_user = User(
+            username=username, email=email, password=password
+        )
         try:
-            hashed = generate_password_hash(password)
-            new_user = User(
-                username=username,
-                email=email,
-                password=hashed,
-                role="mahasiswa",
-            )
-            new_user.save()
-
+            db.session.add(new_user)
+            db.session.commit()
             flash("Registrasi berhasil! Silakan login", "success")
             return redirect(url_for("dashboard.login"))
         except Exception as e:
@@ -150,5 +144,5 @@ def pengaturan():
 @dashboard_bp.route("/profile")
 @login_required
 def profile():
-    users = ParkirModel.get_all_users()
+    users = ParkirModel.get_all_users()  # jika ingin menampilkan data pengguna
     return render_template("profile.html", users=users)
