@@ -74,3 +74,4 @@ class ParkirModel:
 
     @staticmethod
     def get_all_users():
+
