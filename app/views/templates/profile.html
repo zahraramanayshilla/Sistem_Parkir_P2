@@ -4,11 +4,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="../static/image/ulbi.png" type="image/png">
+    <link rel="icon" href="{{ url_for('static', filename='image/ulbi.png') }}" type="image/png">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Sistem Parkir ULBI</title>
-    <!-- Tailwind CDN (no build step) -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -27,7 +26,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-xl grid place-items-center text-white shadow-lg">
-                            <img src="../static/image/ulbi.png" alt="">
+                            <img src="{{ url_for('static', filename='image/ulbi.png') }}" alt="Logo ULBI">
                         </div>
                         <div>
                             <h1 class="text-[clamp(18px,2.1vw,22px)] tracking-wide font-semibold">
@@ -38,211 +37,260 @@
                         </div>
                     </div>
 
-                    <!-- Tombol Burger (Checkbox Hack) -->
+                    <!-- Burger -->
                     <label for="menu-toggle" class="md:hidden text-blue-900 text-3xl cursor-pointer">
                         <i class="bx bx-menu-alt-right"></i>
                     </label>
                 </div>
 
-                <!-- Checkbox Hidden -->
                 <input type="checkbox" id="menu-toggle" class="peer hidden">
 
-                <!-- Navigasi -->
+                <!-- NAVIGATION -->
                 <nav class="max-md:hidden peer-checked:max-md:block">
                     <ul
                         class="bg-blue-50 md:bg-transparent border md:border-none border-blue-100 rounded-xl md:rounded-full p-3 md:p-1 flex flex-col md:flex-row gap-2 md:gap-1 text-sm font-semibold">
 
-                        <li><a data-tab href="{{ url_for('dashboard.index') }}"
-                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                        <li>
+                            <a href="{{ url_for('dashboard.index') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white flex gap-2">
                                 <i class='bx bx-home-smile text-lg'></i>
-                                <span>Dashboard</span></a></li>
+                                Dashboard
+                            </a>
+                        </li>
 
-                        <li><a data-tab href="{{ url_for('dashboard.riwayat') }}"
-                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                        {% if session.role == "admin" %}
+                        <li>
+                            <a href="{{ url_for('dashboard.riwayat') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white flex gap-2">
                                 <i class='bx bx-time text-lg'></i>
-                                <span>Riwayat</span></a></li>
+                                Riwayat
+                            </a>
+                        </li>
+                        {% endif %}
 
-                        <li><a data-tab href="{{ url_for('dashboard.monitoring') }}"
-                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                        {% if session.role in ["admin", "petugas"] %}
+                        <li>
+                            <a href="{{ url_for('dashboard.monitoring') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white flex gap-2">
                                 <i class='bx bx-video text-lg'></i>
-                                <span>Monitoring</span></a></li>
+                                Monitoring
+                            </a>
+                        </li>
+                        {% endif %}
 
-                        <li><a data-tab href="{{ url_for('dashboard.profile') }}"
-                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                        <li>
+                            <a href="{{ url_for('dashboard.profile') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white flex gap-2">
                                 <i class='bx bx-user text-lg'></i>
-                                <span>Profile</span></a></li>
+                                Profile
+                            </a>
+                        </li>
 
-                        <button
-                            class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2 relative text-gray-600 hover:text-blue-600">
-                            <i class='bx bxs-bell text-lg'></i>
-                            <span
-                                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">3</span>
-                        </button>
-
-                        <li><a data-tab href="{{ url_for('dashboard.pengaturan') }}"
-                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                        {% if session.role == "admin" %}
+                        <li>
+                            <a href="{{ url_for('dashboard.pengaturan') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white flex gap-2">
                                 <i class='bx bx-cog text-lg'></i>
-                                <span>Pengaturan</span></a></li>
-
+                                Pengaturan
+                            </a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </nav>
 
             </div>
         </header>
 
+        <!-- FLASH MESSAGE -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="mt-4 mb-2 space-y-2">
+            {% for category, msg in messages %}
+            <div class="px-4 py-2 rounded text-sm
+                {% if category == 'success' %}bg-green-100 text-green-700
+                {% elif category == 'error' %}bg-red-100 text-red-700
+                {% else %}bg-blue-100 text-blue-700{% endif %}">
+                {{ msg }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
 
+
+        <!-- MAIN CONTENT -->
         <main class="mt-4 grid gap-4">
 
-            <!-- ============== USER PROFILE ============== -->
             <section>
                 <div class="grid gap-4 lg:grid-cols-[.9fr_1.1fr]">
 
-                    <!-- Profile Info Card -->
+                    <!-- PROFILE INFO -->
                     <article
-                        class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card grid place-items-center gap-3">
-                        <div class="w-full text-center">
-                            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3">Profil
-                                Pengguna — Info
-                            </div>
-                            <div class="flex flex-col items-center gap-3">
-                                <!-- Dummy Avatar -->
-                                <div
-                                    class="w-28 h-28 rounded-full border border-blue-100 shadow-[0_10px_22px_rgba(30,64,175,.12)] bg-white grid place-items-center text-blue-600 font-bold text-2xl">
-                                    AB
-                                </div>
-                                <p class="text-slate-500 text-center">Informasi akun pengguna/admin yang sedang login.
-                                </p>
-                                <a href="{{ url_for('dashboard.logout') }}"
-                                    class="w-36 py-2 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors duration-300 transform hover:-translate-y-0.5 hover:shadow-lg text-center block">
-                                    Logout
-                                </a>
+                        class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card text-center">
 
-                            </div>
+                        <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3">
+                            Profil Pengguna
                         </div>
+
+                        <div class="flex flex-col items-center gap-3">
+
+                            <div
+                                class="w-28 h-28 rounded-full border border-blue-200 shadow bg-white grid place-items-center text-blue-600 font-bold text-3xl">
+                                {{ current_user.username[:2].upper() }}
+                            </div>
+
+                            <p class="text-lg font-bold">{{ current_user.username }}</p>
+                            <p class="text-sm text-slate-500">{{ current_user.email }}</p>
+                            <p class="text-xs text-slate-400">Role: {{ current_user.role|capitalize }}</p>
+
+                            <a href="{{ url_for('dashboard.logout') }}"
+                                class="mt-3 w-36 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700">
+                                Logout
+                            </a>
+                        </div>
+
                     </article>
 
-                    <!-- Edit Profile Card -->
+
+                    <!-- EDIT PROFILE FORM -->
                     <article
                         class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
-                        <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3">Edit Profil
-                            Pengguna</div>
-                        {% if user_edit %}
-                        <form action="{{ url_for('dashboard.update_user', user_id=user_edit.id) }}" method="POST"
+
+                        <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3">
+                            Edit Profil Saya
+                        </div>
+
+                        <form action="{{ url_for('dashboard.update_profile') }}" method="POST"
                             class="grid gap-4 md:grid-cols-2">
 
-                            <!-- Nama Lengkap -->
-                            <label class="grid gap-2">
-                                <span class="text-[13px] font-bold text-blue-900">Nama Lengkap</span>
-                                <input type="text" name="username" value="{{ user_edit.username }}" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                                           focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200"
-                                    required />
+                            <label class="grid gap-1">
+                                <span class="font-bold text-blue-900 text-sm">Username</span>
+                                <input type="text" name="username" value="{{ current_user.username }}"
+                                    class="p-3 rounded-xl border border-blue-200 bg-white" required>
                             </label>
 
-                            <!-- Email -->
-                            <label class="grid gap-2">
-                                <span class="text-[13px] font-bold text-blue-900">Email</span>
-                                <input type="email" name="email" value="{{ user_edit.email }}" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                                           focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200"
-                                    required />
+                            <label class="grid gap-1">
+                                <span class="font-bold text-blue-900 text-sm">Email</span>
+                                <input type="email" name="email" value="{{ current_user.email }}"
+                                    class="p-3 rounded-xl border border-blue-200 bg-white" required>
                             </label>
 
-                            <!-- Role -->
-                            <label class="grid gap-2">
-                                <span class="text-[13px] font-bold text-blue-900">Role</span>
-                                <select name="role" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                                           focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                                    <option value="Admin" {% if user_edit.role=='Admin' %}selected{% endif %}>Admin
-                                    </option>
-                                    <option value="Petugas" {% if user_edit.role=='Petugas' %}selected{% endif %}>
-                                        Petugas</option>
-                                    <option value="Mahasiswa" {% if user_edit.role=='Mahasiswa' %}selected{% endif %}>
-                                        Mahasiswa</option>
-                                </select>
+                            <label class="grid gap-1 md:col-span-2">
+                                <span class="font-bold text-blue-900 text-sm">Role</span>
+                                <input type="text" value="{{ current_user.role }}" disabled
+                                    class="p-3 rounded-xl border border-gray-200 bg-gray-100 text-gray-500">
                             </label>
 
-                            <!-- Password Baru -->
-                            <label class="grid gap-2 md:col-span-2">
-                                <span class="text-[13px] font-bold text-blue-900">Password Baru (opsional)</span>
+                            <label class="grid gap-1 md:col-span-2">
+                                <span class="font-bold text-blue-900 text-sm">Password Baru (opsional)</span>
                                 <input type="password" name="password" placeholder="Kosongkan jika tidak diganti"
-                                    class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                                           focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
+                                    class="p-3 rounded-xl border border-blue-200 bg-white">
                             </label>
 
-                            <!-- Tombol -->
-                            <div class="flex gap-3 mt-4 md:col-span-2">
+                            <div class="flex justify-end md:col-span-2">
                                 <button type="submit"
-                                    class="px-5 py-3 rounded-xl bg-yellow-600 text-white font-semibold shadow hover:bg-yellow-700">
+                                    class="px-5 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700">
                                     Simpan Perubahan
                                 </button>
-
-                                <a href="{{ url_for('dashboard.profile') }}"
-                                    class="px-5 py-3 rounded-xl bg-gray-400 text-white font-semibold shadow hover:bg-gray-500">
-                                    Kembali
-                                </a>
                             </div>
 
                         </form>
-                        {% endif %}
-
                     </article>
 
-                    <!-- TABEL PENGUNA -->
-
                 </div>
-                <article class="bg-white border border-blue-100 rounded-[18px] shadow-card mt-5">
-                    <div class="px-5 pt-5 pb-3 text-[13px] font-bold uppercase tracking-wide text-slate-500"
-                        id="pengguna-title">
-                        Daftar Pengguna
+
+
+                <!-- USER LIST (ADMIN / PETUGAS) -->
+                {% if users %}
+                <article class="bg-white border border-blue-100 rounded-[18px] shadow-card mt-6">
+
+                    <div class="px-5 pt-5 pb-3 text-[13px] font-bold uppercase tracking-wide text-slate-500">
+                        {% if is_admin %}
+                        Daftar Semua Pengguna
+                        {% else %}
+                        Daftar Petugas
+                        {% endif %}
                     </div>
 
-                    <div class="overflow-auto rounded-b-[18px] border-t border-blue-100/60">
+                    <div class="overflow-auto border-t border-blue-100">
                         <table class="w-full text-sm">
-                            <thead class="sticky top-0 z-[1] bg-gradient-to-b from-blue-50 to-white text-blue-900">
+                            <thead class="bg-blue-50 text-blue-900">
                                 <tr>
-                                    <th class="text-left px-3 py-3">No</th>
-                                    <th class="text-left px-3 py-3">Nama</th>
-                                    <th class="text-left px-3 py-3">Email</th>
-                                    <th class="text-left px-3 py-3">role</th>
-                                    <th class="text-left px-3 py-3">Status</th>
+                                    <th class="px-3 py-3 text-left">Username</th>
+                                    <th class="px-3 py-3 text-left">Email</th>
+                                    <th class="px-3 py-3 text-left">Role</th>
+                                    {% if is_admin %}
+                                    <th class="px-3 py-3 text-left">Aksi</th>
+                                    {% endif %}
                                 </tr>
                             </thead>
 
                             <tbody>
                                 {% for user in users %}
                                 <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
-                                    <td class="px-3 py-3 border-t border-blue-100">{{user.id}}</td>
-                                    <td class="px-3 py-3 border-t border-blue-100">{{ user.username }}</td>
-                                    <td class="px-3 py-3 border-t border-blue-100">{{ user.email }}</td>
-                                    <td class="px-3 py-3 border-t border-blue-100">{{ user.role }}</td>
-                                    <td class="px-3 py-3 border-t border-blue-100 flex gap-2">
 
-                                        <!-- EDIT BUTTON -->
-                                        <a href="/profile?edit_id={{ user.id }}"
-                                            class="px-3 py-1 rounded-md bg-yellow-700 text-white text-xs font-semibold hover:bg-yellow-600 transition">
-                                            Edit
-                                        </a>
+                                    {% if is_admin %}
+                                    <!-- ADMIN CAN EDIT -->
+                                    <form action="{{ url_for('dashboard.update_user', user_id=user.id) }}"
+                                        method="POST" class="contents">
 
-                                        <!-- DELETE BUTTON -->
-                                        <a href="{{ url_for('dashboard.delete_user', user_id=user.id) }}"
-                                            onclick="return confirm('Yakin ingin menghapus user ini?');"
-                                            class="px-3 py-1 rounded-md bg-red-500 text-white text-xs font-semibold hover:bg-red-600 transition">
-                                            Hapus
-                                        </a>
-                                    </td>
+                                        <td class="px-3 py-3">
+                                            <input type="text" name="username" value="{{ user.username }}"
+                                                class="px-2 py-1 w-full rounded border border-blue-200 bg-white">
+                                        </td>
+
+                                        <td class="px-3 py-3">
+                                            <input type="email" name="email" value="{{ user.email }}"
+                                                class="px-2 py-1 w-full rounded border border-blue-200 bg-white">
+                                        </td>
+
+                                        <td class="px-3 py-3">
+                                            <select name="role"
+                                                class="px-2 py-1 w-full rounded border border-blue-200 bg-white">
+                                                <option value="petugas" {% if user.role=='petugas' %}selected{% endif %}>Petugas</option>
+                                                <option value="admin" {% if user.role=='admin' %}selected{% endif %}>Admin</option>
+                                            </select>
+                                        </td>
+
+                                        <td class="px-3 py-3">
+                                            <div class="flex gap-2">
+                                                <button type="submit"
+                                                    class="px-3 py-1 rounded bg-emerald-600 text-white hover:bg-emerald-700 text-xs">
+                                                    Simpan
+                                                </button>
+
+                                                {% if user.id != current_user.id %}
+                                                <a href="{{ url_for('dashboard.delete_user', user_id=user.id) }}"
+                                                    class="px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600 text-xs"
+                                                    onclick="return confirm('Yakin ingin menghapus user ini?')">
+                                                    Hapus
+                                                </a>
+                                                {% else %}
+                                                <span class="text-xs text-gray-400">(Akun Anda)</span>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+
+                                    </form>
+
+                                    {% else %}
+                                    <!-- PETUGAS VIEW ONLY -->
+                                    <td class="px-3 py-3">{{ user.username }}</td>
+                                    <td class="px-3 py-3">{{ user.email }}</td>
+                                    <td class="px-3 py-3">{{ user.role|capitalize }}</td>
+                                    {% endif %}
+
                                 </tr>
                                 {% endfor %}
                             </tbody>
+
                         </table>
                     </div>
                 </article>
+                {% endif %}
 
             </section>
-
         </main>
-
     </div>
-
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
-
 </html>
