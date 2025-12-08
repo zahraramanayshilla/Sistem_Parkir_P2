@@ -48,44 +48,71 @@
                 <input type="checkbox" id="menu-toggle" class="peer hidden">
 
                 <!-- Navigasi -->
-                <nav class="max-md:hidden peer-checked:max-md:block">
-                    <ul
-                        class="bg-blue-50 md:bg-transparent border md:border-none border-blue-100 rounded-xl md:rounded-full p-3 md:p-1 flex flex-col md:flex-row gap-2 md:gap-1 text-sm font-semibold">
-
-                        <li><a data-tab href="{{ url_for('dashboard.index') }}"
-                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
-                                <i class='bx bx-home-smile text-lg'></i>
-                                <span>Dashboard</span></a></li>
-
-                        <li><a data-tab href="{{ url_for('dashboard.riwayat') }}"
-                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
-                                <i class='bx bx-time text-lg'></i>
-                                <span>Riwayat</span></a></li>
-
-                        <li><a data-tab href="{{ url_for('dashboard.monitoring') }}"
-                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
-                                <i class='bx bx-video text-lg'></i>
-                                <span>Monitoring</span></a></li>
-
-                        <li><a data-tab href="{{ url_for('dashboard.profile') }}"
-                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
-                                <i class='bx bx-user text-lg'></i>
-                                <span>Profile</span></a></li>
-
-                        <button
-                            class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2 relative text-gray-600 hover:text-blue-600">
-                            <i class='bx bxs-bell text-lg'></i>
-                            <span
-                                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">3</span>
-                        </button>
-
-                        <li><a data-tab href="{{ url_for('dashboard.pengaturan') }}"
-                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
-                                <i class='bx bx-cog text-lg'></i>
-                                <span>Pengaturan</span></a></li>
-
-                    </ul>
-                </nav>
+        <nav class="max-md:hidden peer-checked:max-md:block">
+            <ul
+                class="bg-blue-50 md:bg-transparent border md:border-none border-blue-100 rounded-xl md:rounded-full p-3 md:p-1 flex flex-col md:flex-row gap-2 md:gap-1 text-sm font-semibold">
+        
+                <!-- Dashboard: semua role -->
+                <li>
+                    <a data-tab href="{{ url_for('dashboard.index') }}"
+                        class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                        <i class='bx bx-home-smile text-lg'></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+        
+                <!-- Hanya admin yang boleh lihat Riwayat -->
+                {% if session.role == 'petugas','admin' %}
+                <li>
+                    <a data-tab href="{{ url_for('dashboard.riwayat') }}"
+                        class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                        <i class='bx bx-time text-lg'></i>
+                        <span>Riwayat</span>
+                    </a>
+                </li>
+                {% endif %}
+        
+                <!-- Petugas + admin boleh lihat Monitoring -->
+                {% if session.role in ['petugas', 'admin'] %}
+                <li>
+                    <a data-tab href="{{ url_for('dashboard.monitoring') }}"
+                        class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                        <i class='bx bx-video text-lg'></i>
+                        <span>Monitoring</span>
+                    </a>
+                </li>
+                {% endif %}
+        
+                <!-- Profile: semua role -->
+                <li>
+                    <a data-tab href="{{ url_for('dashboard.profile') }}"
+                        class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                        <i class='bx bx-user-circle text-lg'></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+        
+                <!-- Notifikasi dummy -->
+                <button
+                    class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2 relative text-gray-600 hover:text-blue-600">
+                    <i class='bx bxs-bell text-lg'></i>
+                    <span
+                        class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                </button>
+        
+                <!-- Pengaturan: hanya admin -->
+                {% if session.role == 'admin' %}
+                <li>
+                    <a data-tab href="{{ url_for('dashboard.pengaturan') }}"
+                        class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                        <i class='bx bx-cog text-lg'></i>
+                        <span>Pengaturan</span>
+                    </a>
+                </li>
+                {% endif %}
+        
+            </ul>
+        </nav>
 
             </div>
         </header>

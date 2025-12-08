@@ -103,3 +103,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+// notifikasi dropdown
+document.addEventListener("DOMContentLoaded", () => {
+    const notifBtn = document.getElementById("notifBtn");
+    const notifDropdown = document.getElementById("notifDropdown");
+
+    // Toggle dropdown notifikasi
+    notifBtn.addEventListener("click", () => {
+        notifDropdown.classList.toggle("hidden");
+    });
+
+    // Klik di luar -> tutup dropdown
+    document.addEventListener("click", function (e) {
+        const clickInsideButton = notifBtn.contains(e.target);
+        const clickInsideDropdown = notifDropdown.contains(e.target);
+
+        if (!clickInsideButton && !clickInsideDropdown) {
+            notifDropdown.classList.add("hidden");
+        }
+    });
+});
