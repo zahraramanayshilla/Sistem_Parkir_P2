@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" href="../static/image/ulbi.png" type="image/png">
+  <link rel="icon" href="{{ url_for('static', filename='image/ulbi.png') }}" type="image/png">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <title>Sistem Parkir ULBI</title>
@@ -12,7 +12,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="min-h-dvh text-slate-900 [background:radial-gradient(1200px_800px_at_20%-10%,#eff6ff,transparent_60%),_radial-gradient(900px_600px_at_110%-20%,#e8f0ff,transparent_55%),_#f7faff]">
+<body
+  class="min-h-dvh text-slate-900 [background:radial-gradient(1200px_800px_at_20%-10%,#eff6ff,transparent_60%),_radial-gradient(900px_600px_at_110%-20%,#e8f0ff,transparent_55%),_#f7faff]">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" id="app">
     <!-- HEADER -->
     <header
@@ -24,7 +25,7 @@
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl grid place-items-center text-white shadow-lg">
-              <img src="../static/image/ulbi.png" alt="">
+              <img src="{{ url_for('static', filename='image/ulbi.png') }}" alt="Logo ULBI">
             </div>
             <div>
               <h1 class="text-[clamp(18px,2.1vw,22px)] tracking-wide font-semibold">
@@ -48,36 +49,64 @@
           <ul
             class="bg-blue-50 md:bg-transparent border md:border-none border-blue-100 rounded-xl md:rounded-full p-3 md:p-1 flex flex-col md:flex-row gap-2 md:gap-1 text-sm font-semibold">
 
-            <li><a data-tab href="{{ url_for('dashboard.index') }}"
+            <!-- Dashboard: semua role -->
+            <li>
+              <a data-tab href="{{ url_for('dashboard.index') }}"
                 class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
                 <i class='bx bx-home-smile text-lg'></i>
-                <span>Dashboard</span></a></li>
+                <span>Dashboard</span>
+              </a>
+            </li>
 
-            <li><a data-tab href="{{ url_for('dashboard.riwayat') }}"
+            <!-- Hanya admin yang boleh lihat Riwayat -->
+            {% if session.role == 'admin' %}
+            <li>
+              <a data-tab href="{{ url_for('dashboard.riwayat') }}"
                 class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
                 <i class='bx bx-time text-lg'></i>
-                <span>Riwayat</span></a></li>
+                <span>Riwayat</span>
+              </a>
+            </li>
+            {% endif %}
 
-            <li><a data-tab href="{{ url_for('dashboard.monitoring') }}"
+            <!-- Petugas + admin boleh lihat Monitoring -->
+            {% if session.role in ['petugas', 'admin'] %}
+            <li>
+              <a data-tab href="{{ url_for('dashboard.monitoring') }}"
                 class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
                 <i class='bx bx-video text-lg'></i>
-                <span>Monitoring</span></a></li>
+                <span>Monitoring</span>
+              </a>
+            </li>
+            {% endif %}
 
-          <li><a data-tab href="{{ url_for('dashboard.profile') }}"
+            <!-- Profile: semua role -->
+            <li>
+              <a data-tab href="{{ url_for('dashboard.profile') }}"
                 class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
-                <i class='bx bx-user text-lg'></i>
-                <span>Profile</span></a></li>
+                <i class='bx bx-user-circle text-lg'></i>
+                <span>Profile</span>
+              </a>
+            </li>
 
-            <button class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2 relative text-gray-600 hover:text-blue-600">
+            <!-- Notifikasi dummy -->
+            <button
+              class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2 relative text-gray-600 hover:text-blue-600">
               <i class='bx bxs-bell text-lg'></i>
               <span
                 class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">3</span>
             </button>
 
-            <li><a data-tab href="{{ url_for('dashboard.pengaturan') }}"
+            <!-- Pengaturan: hanya admin -->
+            {% if session.role == 'admin' %}
+            <li>
+              <a data-tab href="{{ url_for('dashboard.pengaturan') }}"
                 class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
                 <i class='bx bx-cog text-lg'></i>
-                <span>Pengaturan</span></a></li>
+                <span>Pengaturan</span>
+              </a>
+            </li>
+            {% endif %}
 
           </ul>
         </nav>
@@ -174,7 +203,7 @@
                   <p class="text-xs text-gray-500">Gate 1 • 10:35 WIB</p>
                 </div>
               </div>
-              
+
             </div>
             <div class="mt-4">
               <button class="w-full bg-slate-800 text-white py-2 rounded text-sm hover:bg-slate-700">
@@ -186,8 +215,8 @@
 
         <article class="bg-white border border-blue-100 rounded-[18px] shadow-card mt-5">
           <div class="px-5 pt-5 pb-3 text-[13px] font-bold uppercase tracking-wide text-slate-500" id="riwayat-title">
-            Riwayat
-            Hari Ini</div>
+            Riwayat Hari Ini
+          </div>
           <div class="overflow-auto rounded-b-[18px] border-t border-blue-100/60">
             <table class="w-full text-sm">
               <thead class="sticky top-0 z-[1] bg-gradient-to-b from-blue-50 to-white text-blue-900">
