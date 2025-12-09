@@ -3,6 +3,7 @@
 from datetime import datetime, timedelta
 from werkzeug.security import check_password_hash
 from app.models.db_models import User, ParkirLog
+from bson import ObjectId
 
 
 class ParkirModel:
@@ -41,13 +42,14 @@ class ParkirModel:
     # ============================
     @staticmethod
     def get_user_by_id(user_id: str):
-        """
-        Ambil user berdasarkan id MongoDB (string).
-        """
         if not user_id:
             return None
-        return User.objects(id=user_id).first()
-
+        try:
+            return User.objects(id=ObjectId(user_id)).first()
+        except Exception:
+            return None
+        
+        
     @staticmethod
     def get_all_users():
         """
