@@ -130,7 +130,7 @@ def index():
 # ============================
 @dashboard_bp.route("/riwayat")
 @login_required
-@role_required("admin")
+@role_required("petugas","admin")
 def riwayat():
     return render_template("riwayat.html")
 

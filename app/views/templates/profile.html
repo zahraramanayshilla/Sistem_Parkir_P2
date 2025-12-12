@@ -49,54 +49,69 @@
                 <nav class="max-md:hidden peer-checked:max-md:block">
                     <ul
                         class="bg-blue-50 md:bg-transparent border md:border-none border-blue-100 rounded-xl md:rounded-full p-3 md:p-1 flex flex-col md:flex-row gap-2 md:gap-1 text-sm font-semibold">
-
+                
+                        <!-- Dashboard: semua role -->
                         <li>
-                            <a href="{{ url_for('dashboard.index') }}"
-                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white flex gap-2">
+                            <a data-tab href="{{ url_for('dashboard.index') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
                                 <i class='bx bx-home-smile text-lg'></i>
-                                Dashboard
+                                <span>Dashboard</span>
                             </a>
                         </li>
-
-                        {% if session.role == "admin" %}
+                
+                        <!-- Hanya admin yang boleh lihat Riwayat -->
+                        {% if session.role == 'petugas','admin' %}
                         <li>
-                            <a href="{{ url_for('dashboard.riwayat') }}"
-                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white flex gap-2">
+                            <a data-tab href="{{ url_for('dashboard.riwayat') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
                                 <i class='bx bx-time text-lg'></i>
-                                Riwayat
+                                <span>Riwayat</span>
                             </a>
                         </li>
                         {% endif %}
-
-                        {% if session.role in ["admin", "petugas"] %}
+                
+                        <!-- Petugas + admin boleh lihat Monitoring -->
+                        {% if session.role in ['petugas', 'admin'] %}
                         <li>
-                            <a href="{{ url_for('dashboard.monitoring') }}"
-                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white flex gap-2">
+                            <a data-tab href="{{ url_for('dashboard.monitoring') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
                                 <i class='bx bx-video text-lg'></i>
-                                Monitoring
+                                <span>Monitoring</span>
                             </a>
                         </li>
                         {% endif %}
-
+                
+                        <!-- Profile: semua role -->
                         <li>
-                            <a href="{{ url_for('dashboard.profile') }}"
-                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white flex gap-2">
-                                <i class='bx bx-user text-lg'></i>
-                                Profile
+                            <a data-tab href="{{ url_for('dashboard.profile') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                <i class='bx bx-user-circle text-lg'></i>
+                                <span>Profile</span>
                             </a>
                         </li>
-
-                        {% if session.role == "admin" %}
+                
+                        <!-- Notifikasi dummy -->
+                        <button
+                            class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2 relative text-gray-600 hover:text-blue-600">
+                            <i class='bx bxs-bell text-lg'></i>
+                            <span
+                                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                        </button>
+                
+                        <!-- Pengaturan: hanya admin -->
+                        {% if session.role == 'admin' %}
                         <li>
-                            <a href="{{ url_for('dashboard.pengaturan') }}"
-                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white flex gap-2">
+                            <a data-tab href="{{ url_for('dashboard.pengaturan') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
                                 <i class='bx bx-cog text-lg'></i>
-                                Pengaturan
+                                <span>Pengaturan</span>
                             </a>
                         </li>
                         {% endif %}
+                
                     </ul>
                 </nav>
+
 
             </div>
         </header>
@@ -231,8 +246,8 @@
 
                                     {% if is_admin %}
                                     <!-- ADMIN CAN EDIT -->
-                                    <form action="{{ url_for('dashboard.update_user', user_id=user.id) }}"
-                                        method="POST" class="contents">
+                                    <form action="{{ url_for('dashboard.update_user', user_id=user.id) }}" method="POST"
+                                        class="contents">
 
                                         <td class="px-3 py-3">
                                             <input type="text" name="username" value="{{ user.username }}"
@@ -247,8 +262,10 @@
                                         <td class="px-3 py-3">
                                             <select name="role"
                                                 class="px-2 py-1 w-full rounded border border-blue-200 bg-white">
-                                                <option value="petugas" {% if user.role=='petugas' %}selected{% endif %}>Petugas</option>
-                                                <option value="admin" {% if user.role=='admin' %}selected{% endif %}>Admin</option>
+                                                <option value="petugas" {% if user.role=='petugas' %}selected{% endif
+                                                    %}>Petugas</option>
+                                                <option value="admin" {% if user.role=='admin' %}selected{% endif %}>
+                                                    Admin</option>
                                             </select>
                                         </td>
 
@@ -292,5 +309,15 @@
             </section>
         </main>
     </div>
+    <footer
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mt-6 bg-gradient-to-br from-white to-blue-100 border border-blue-100 rounded-t-[18px] px-6 py-4 shadow-card text-sm text-slate-500 flex flex-col sm:flex-row sm:justify-between items-center gap-2">
+        <div>
+            &copy; 2025 <span class="font-semibold text-blue-900">ULBIParkir</span>. Semua hak cipta dilindungi.
+        </div>
+    
+    </footer>
+        <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
 </body>
+
 </html>
