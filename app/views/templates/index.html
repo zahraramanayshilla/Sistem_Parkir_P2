@@ -13,8 +13,8 @@
 </head>
 
 <body
-  class="min-h-dvh text-slate-900 [background:radial-gradient(1200px_800px_at_20%-10%,#eff6ff,transparent_60%),_radial-gradient(900px_600px_at_110%-20%,#e8f0ff,transparent_55%),_#f7faff]">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" id="app">
+  class="bg-slate-50 text-slate-900 [background:radial-gradient(1200px_800px_at_20%-10%,#eff6ff,transparent_60%),_radial-gradient(900px_600px_at_110%-20%,#e8f0ff,transparent_55%),_#f7faff]">
+  <div class="min-h-screen flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" id="app">
     <!-- HEADER -->
     <header
       class="sticky top-0 z-20 bg-gradient-to-br from-white to-blue-50 border border-blue-100 rounded-[18px] px-4 sm:px-6 py-3 shadow-card backdrop-blur-md saturate-125">
@@ -69,16 +69,6 @@
             </li>
             {% endif %}
 
-            <!-- Petugas + admin boleh lihat Monitoring -->
-            {% if session.role in ['petugas', 'admin'] %}
-            <li>
-              <a data-tab href="{{ url_for('dashboard.monitoring') }}"
-                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
-                <i class='bx bx-video text-lg'></i>
-                <span>Monitoring</span>
-              </a>
-            </li>
-            {% endif %}
 
             <!-- Profile: semua role -->
             <li>
@@ -149,157 +139,167 @@
 
     <main class="mt-4 grid gap-4">
       <!-- ============== DASHBOARD ============== -->
-      <section>
+      <section class="space-y-6">
+
+        <!-- ================= STATISTICS ================= -->
         <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-          <!-- Stat Card -->
+
+          <!-- Total Slot -->
           <article
             class="bg-gradient-to-b from-white to-blue-400/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
-            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">Total Slot</div>
-            <div class="text-[clamp(28px,4vw,36px)] font-extrabold text-blue-900">250</div>
-            <p class="text-slate-500">Semua area & gedung</p>
+            <p class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">
+              Total Slot Parkir
+            </p>
+            <p class="text-[clamp(28px,4vw,36px)] font-extrabold text-blue-900">
+              250
+            </p>
+            <p class="text-slate-500 text-sm">
+              Seluruh area kampus
+            </p>
           </article>
+
+          <!-- Tersedia -->
           <article
-            class="bg-gradient-to-b from-white to-yellow-400/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
-            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">Tersedia</div>
-            <div class="text-[clamp(28px,4vw,36px)] font-extrabold text-blue-900">178</div>
+            class="bg-gradient-to-b from-white to-green-400/30 border border-green-100 rounded-[18px] p-5 shadow-card">
+            <p class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">
+              Slot Tersedia
+            </p>
+            <p class="text-[clamp(28px,4vw,36px)] font-extrabold text-green-700">
+              178
+            </p>
             <div
-              class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-green-50 text-green-700 border border-green-200">
-              <span class="w-2.5 h-2.5 rounded-full bg-green-600 ring-4 ring-green-500/15"></span>
-              Tingkat ketersediaan tinggi
+              class="inline-flex items-center gap-2 mt-2 px-3 py-1.5 rounded-full text-xs font-bold bg-green-50 text-green-700 border border-green-200">
+              <span class="w-2.5 h-2.5 rounded-full bg-green-600 ring-4 ring-green-500/20"></span>
+              Ketersediaan Tinggi
             </div>
           </article>
+
+          <!-- Terpakai -->
           <article
-            class="bg-gradient-to-b from-white to-orange-400/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
-            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">Terpakai</div>
-            <div class="text-[clamp(28px,4vw,36px)] font-extrabold text-blue-900">72</div>
-            <p class="text-slate-500">Update ± 1 menit lalu</p>
+            class="bg-gradient-to-b from-white to-orange-400/30 border border-orange-100 rounded-[18px] p-5 shadow-card">
+            <p class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">
+              Slot Terpakai
+            </p>
+            <p class="text-[clamp(28px,4vw,36px)] font-extrabold text-orange-700">
+              72
+            </p>
+            <p class="text-slate-500 text-sm">
+              Update terakhir ±1 menit
+            </p>
           </article>
+
+          <!-- Durasi -->
           <article
-            class="bg-gradient-to-b from-white to-green-400/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
-            <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">Rata-rata Durasi
-            </div>
-            <div class="text-[clamp(28px,4vw,36px)] font-extrabold text-blue-900">1j 42m</div>
-            <p class="text-slate-500">Kendaraan parkir hari ini</p>
+            class="bg-gradient-to-b from-white to-indigo-400/30 border border-indigo-100 rounded-[18px] p-5 shadow-card">
+            <p class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">
+              Rata-rata Durasi
+            </p>
+            <p class="text-[clamp(28px,4vw,36px)] font-extrabold text-indigo-700">
+              1j 42m
+            </p>
+            <p class="text-slate-500 text-sm">
+              Kendaraan hari ini
+            </p>
           </article>
+
         </div>
-        <a data-tab href="#riwayat"
-          class="tab mt-4 px-3.5 py-2 rounded-full text-blue-900/90 border border-transparent hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md transition flex items-center gap-2"><i
-            class='bx bx-time text-xl'></i>
-          <span>Riwayat</span></a>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
 
-          <!-- diagram statistik -->
-          <div class="bg-white p-5 rounded-xl shadow lg:col-span-2">
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="font-bold text-gray-700">Statistik Kendaraan Masuk (Mingguan)</h3>
-              <select class="text-xs border rounded p-1 bg-gray-50">
-                <option>Minggu Ini</option>
-                <option>Bulan Ini</option>
-              </select>
-            </div>
-            <div class="h-64 w-full relative">
-              <canvas id="trafficChart"></canvas>
-            </div>
-          </div>
-          <!-- log aktivitas -->
-          <div class="bg-white p-5 rounded-xl shadow lg:col-span-1">
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="font-bold text-gray-700">Log Aktivitas</h3>
-              <button class="text-blue-600 text-xs hover:underline">Lihat Semua</button>
-            </div>
-            <div class="space-y-10">
-              <div class="flex items-start space-x-3">
-                <div class="bg-green-100 p-2 rounded-full text-green-600 text-xs">
-                  <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                </div>
-                <div>
-                  <p class="text-sm font-bold text-gray-700">Motor Masuk (Mahasiswa)</p>
-                  <p class="text-xs text-gray-500">B 4567 TZN • 10:42 WIB</p>
-                </div>
-              </div>
-              <div class="flex items-start space-x-3">
-                <div class="bg-green-100 p-2 rounded-full text-green-600 text-xs">
-                  <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                </div>
-                <div>
-                  <p class="text-sm font-bold text-gray-700">Motor Keluar (Mahasiswa)</p>
-                  <p class="text-xs text-gray-500">B 9988 UY • 10:15 WIB</p>
-                </div>
-              </div>
-              <div class="flex items-start space-x-3">
-                <div class="bg-red-100 p-2 rounded-full text-red-600 text-xs">
-                  <i class="fa-solid fa-triangle-exclamation"></i>
-                </div>
-                <div>
-                  <p class="text-sm font-bold text-red-600">QR Tidak Terdaftar!</p>
-                  <p class="text-xs text-gray-500">Gate 1 • 10:35 WIB</p>
-                </div>
-              </div>
+        <!-- ================= LOG + RIWAYAT ================= -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-            </div>
-            <div class="mt-4">
-              <button class="w-full bg-slate-800 text-white py-2 rounded text-sm hover:bg-slate-700">
-                <i class="fa-solid fa-file-export mr-2"></i> Export Laporan (PDF)
+          <!-- ===== LOG AKTIVITAS (KIRI – KECIL) ===== -->
+          <article class="bg-white p-4 rounded-xl shadow lg:col-span-1 h-fit">
+            <div class="flex justify-between items-center mb-3">
+              <h3 class="font-bold text-sm text-gray-700">Log Aktivitas</h3>
+              <button class="text-blue-600 text-xs hover:underline">
+                Semua
               </button>
             </div>
-          </div>
+
+            <div class="space-y-4 text-sm">
+
+              <!-- Masuk -->
+              <div class="flex items-start gap-3">
+                <div class="bg-green-100 p-2 rounded-full text-green-600">
+                  <i class="fa-solid fa-arrow-right-to-bracket text-xs"></i>
+                </div>
+                <div>
+                  <p class="font-semibold text-gray-700">Motor Masuk</p>
+                  <p class="text-xs text-gray-500">B 4567 TZN • 10:42</p>
+                </div>
+              </div>
+
+              <!-- Keluar -->
+              <div class="flex items-start gap-3">
+                <div class="bg-blue-100 p-2 rounded-full text-blue-600">
+                  <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
+                </div>
+                <div>
+                  <p class="font-semibold text-gray-700">Motor Keluar</p>
+                  <p class="text-xs text-gray-500">B 9988 UY • 10:15</p>
+                </div>
+              </div>
+
+              <!-- Error -->
+              <div class="flex items-start gap-3">
+                <div class="bg-red-100 p-2 rounded-full text-red-600">
+                  <i class="fa-solid fa-triangle-exclamation text-xs"></i>
+                </div>
+                <div>
+                  <p class="font-semibold text-red-600">QR Tidak Valid</p>
+                  <p class="text-xs text-gray-500">Gate 1 • 10:35</p>
+                </div>
+              </div>
+
+            </div>
+          </article>
+
+          <!-- ===== TABEL RIWAYAT (KANAN – BESAR) ===== -->
+          <article class="bg-white border border-blue-100 rounded-[18px] shadow-card lg:col-span-2">
+
+            <div class="px-5 pt-5 pb-3 text-[13px] font-bold uppercase tracking-wide text-slate-500">
+              Riwayat Parkir Hari Ini
+            </div>
+
+            <div class="overflow-auto rounded-b-[18px] border-t border-blue-100/60 max-h-[360px]">
+              <table class="w-full text-sm">
+                <thead class="sticky top-0 bg-blue-50 text-blue-900">
+                  <tr>
+                    <th class="text-left px-3 py-3">Waktu</th>
+                    <th class="text-left px-3 py-3">Status</th>
+                    <th class="text-left px-3 py-3">NPM</th>
+                    <th class="text-left px-3 py-3">Nama</th>
+                    <th class="text-left px-3 py-3">Durasi</th>
+                  </tr>
+                </thead>
+
+                <tbody id="riwayat-body">
+                  
+                </tbody>
+              </table>
+            </div>
+
+          </article>
+
         </div>
 
-        <article class="bg-white border border-blue-100 rounded-[18px] shadow-card mt-5">
-          <div class="px-5 pt-5 pb-3 text-[13px] font-bold uppercase tracking-wide text-slate-500" id="riwayat-title">
-            Riwayat Hari Ini
-          </div>
-          <div class="overflow-auto rounded-b-[18px] border-t border-blue-100/60">
-            <table class="w-full text-sm">
-              <thead class="sticky top-0 z-[1] bg-gradient-to-b from-blue-50 to-white text-blue-900">
-                <tr>
-                  <th class="text-left px-3 py-3">Waktu</th>
-                  <th class="text-left px-3 py-3">Jenis</th>
-                  <th class="text-left px-3 py-3">NPM / ID</th>
-                  <th class="text-left px-3 py-3">Nama Mahasiswa</th>
-                  <th class="text-left px-3 py-3">Durasi</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
-                  <td class="px-3 py-3 border-t border-blue-100">07:42</td>
-                  <td class="px-3 py-3 border-t border-blue-100">Masuk</td>
-                  <td class="px-3 py-3 border-t border-blue-100">21.11.1234</td>
-                  <td class="px-3 py-3 border-t border-blue-100">Zahra Ramanayshilla</td>
-                  <td class="px-3 py-3 border-t border-blue-100">—</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
-                  <td class="px-3 py-3 border-t border-blue-100">08:05</td>
-                  <td class="px-3 py-3 border-t border-blue-100">Masuk</td>
-                  <td class="px-3 py-3 border-t border-blue-100">22.22.5678</td>
-                  <td class="px-3 py-3 border-t border-blue-100">Zahra Sabila</td>
-                  <td class="px-3 py-3 border-t border-blue-100">—</td>
-                </tr>
-                <tr class="odd:bg-white even:bg-blue-50/30 hover:bg-blue-50">
-                  <td class="px-3 py-3 border-t border-blue-100">10:13</td>
-                  <td class="px-3 py-3 border-t border-blue-100">Keluar</td>
-                  <td class="px-3 py-3 border-t border-blue-100">21.11.1234</td>
-                  <td class="px-3 py-3 border-t border-blue-100">D 1234 GIL</td>
-                  <td class="px-3 py-3 border-t border-blue-100">2j 31m</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </article>
       </section>
+
+
     </main>
   </div>
 
   <!-- FOOTER STICKY SESUAI DASHBOARD -->
   <footer
-    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mt-6 bg-gradient-to-br from-white to-blue-100 border border-blue-100 rounded-t-[18px] px-6 py-4 shadow-card text-sm text-slate-500 flex flex-col sm:flex-row sm:justify-between items-center gap-2">
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 bg-gradient-to-br from-white to-blue-100 border border-blue-100 rounded-t-[18px] px-6 py-4 shadow-card text-sm text-slate-500 flex flex-col sm:flex-row sm:justify-between items-center gap-2">
     <div>
       &copy; 2025 <span class="font-semibold text-blue-900">ULBIParkir</span>. Semua hak cipta dilindungi.
     </div>
 
   </footer>
-
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="{{ url_for('static', filename='js/realtime.js') }}"></script>
   <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 

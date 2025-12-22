@@ -1,6 +1,8 @@
 # app/__init__.py
+
 from flask import Flask
 import mongoengine
+from app.controllers.socket_controller import socketio
 
 
 def create_app(config_object=None):
@@ -10,14 +12,19 @@ def create_app(config_object=None):
         static_folder="views/static",
     )
 
-    # Load config
+    # =========================
+    # LOAD CONFIG
+    # =========================
     if config_object is None:
         from app.config import Config
+
         app.config.from_object(Config)
     else:
         app.config.from_object(config_object)
 
-    # Koneksi ke MongoDB
+    # =========================
+    # MONGODB (MongoEngine)
+    # =========================
     mongo_cfg = app.config.get("MONGODB_SETTINGS", {})
     mongoengine.connect(
         db=mongo_cfg.get("db", "sistem_parkir"),
@@ -26,8 +33,16 @@ def create_app(config_object=None):
         password=mongo_cfg.get("password"),
     )
 
-    # Register blueprints
+    # =========================
+    # SOCKET.IO
+    # =========================
+    socketio.init_app(app)
+
+    # =========================
+    # REGISTER BLUEPRINT
+    # =========================
     from app.controllers.dashboard_controller import dashboard_bp
+
     app.register_blueprint(dashboard_bp)
 
     return app

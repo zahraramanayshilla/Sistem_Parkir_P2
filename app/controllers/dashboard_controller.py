@@ -122,7 +122,11 @@ def logout():
 @dashboard_bp.route("/")
 @login_required
 def index():
-    return render_template("index.html")
+    # data awal (sekali saja, pakai Jinja)
+    from app.models.db_models import ParkirLog
+
+    logs = ParkirLog.objects.order_by("-waktu_masuk")[:20]
+    return render_template("index.html", logs=logs)
 
 
 # ============================
@@ -191,7 +195,6 @@ def profile():
         is_admin=is_admin,
         is_petugas=is_petugas,
     )
-
 
 
 # ============================================================

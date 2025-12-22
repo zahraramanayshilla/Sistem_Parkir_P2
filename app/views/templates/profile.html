@@ -12,9 +12,9 @@
 </head>
 
 <body
-    class="min-h-dvh text-slate-900 [background:radial-gradient(1200px_800px_at_20%-10%,#eff6ff,transparent_60%),_radial-gradient(900px_600px_at_110%-20%,#e8f0ff,transparent_55%),_#f7faff]">
+    class="bg-slate-50 text-slate-900 [background:radial-gradient(1200px_800px_at_20%-10%,#eff6ff,transparent_60%),_radial-gradient(900px_600px_at_110%-20%,#e8f0ff,transparent_55%),_#f7faff]">
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" id="app">
+    <div class="min-h-screen flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" id="app">
 
         <!-- HEADER -->
         <header
@@ -45,7 +45,7 @@
 
                 <input type="checkbox" id="menu-toggle" class="peer hidden">
 
-                <!-- NAVIGATION -->
+                <!-- Navigasi -->
                 <nav class="max-md:hidden peer-checked:max-md:block">
                     <ul
                         class="bg-blue-50 md:bg-transparent border md:border-none border-blue-100 rounded-xl md:rounded-full p-3 md:p-1 flex flex-col md:flex-row gap-2 md:gap-1 text-sm font-semibold">
@@ -70,16 +70,6 @@
                         </li>
                         {% endif %}
                 
-                        <!-- Petugas + admin boleh lihat Monitoring -->
-                        {% if session.role in ['petugas', 'admin'] %}
-                        <li>
-                            <a data-tab href="{{ url_for('dashboard.monitoring') }}"
-                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
-                                <i class='bx bx-video text-lg'></i>
-                                <span>Monitoring</span>
-                            </a>
-                        </li>
-                        {% endif %}
                 
                         <!-- Profile: semua role -->
                         <li>
@@ -91,12 +81,45 @@
                         </li>
                 
                         <!-- Notifikasi dummy -->
-                        <button
-                            class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2 relative text-gray-600 hover:text-blue-600">
-                            <i class='bx bxs-bell text-lg'></i>
-                            <span
-                                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">3</span>
-                        </button>
+                        <!-- Notifikasi -->
+                        <div class="relative">
+                            <button id="notifBtn"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2 relative text-gray-600 hover:text-blue-600">
+                                <i class='bx bxs-bell text-lg'></i>
+                                <span
+                                    class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                                    3
+                                </span>
+                            </button>
+                
+                            <!-- DROPDOWN NOTIFIKASI -->
+                            <div id="notifDropdown"
+                                class="hidden absolute right-0 mt-2 w-72 bg-white border border-blue-100 rounded-xl shadow-lg z-50">
+                
+                                <!-- Header -->
+                                <div class="px-4 py-2 font-semibold text-blue-900 border-b">Notifikasi</div>
+                
+                                <!-- List Notifikasi -->
+                                <ul class="max-h-60 overflow-y-auto" id="notifList">
+                                    <!-- Contoh notifikasi statis -->
+                                    <li class="px-4 py-3 border-b hover:bg-blue-50">
+                                        <div class="font-semibold text-green-700">Scan Berhasil</div>
+                                        <div class="text-xs text-gray-500">Mahasiswa: Andi (08:10)</div>
+                                    </li>
+                
+                                    <li class="px-4 py-3 border-b hover:bg-blue-50">
+                                        <div class="font-semibold text-red-700">Scan Gagal</div>
+                                        <div class="text-xs text-gray-500">QR tidak valid (08:09)</div>
+                                    </li>
+                
+                                    <li class="px-4 py-3 hover:bg-blue-50">
+                                        <div class="font-semibold text-blue-700">Kamera aktif</div>
+                                        <div class="text-xs text-gray-500">Monitoring dimulai (08:00)</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                
                 
                         <!-- Pengaturan: hanya admin -->
                         {% if session.role == 'admin' %}
@@ -111,6 +134,7 @@
                 
                     </ul>
                 </nav>
+
 
 
             </div>
@@ -309,13 +333,13 @@
             </section>
         </main>
     </div>
-    <footer
-        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mt-6 bg-gradient-to-br from-white to-blue-100 border border-blue-100 rounded-t-[18px] px-6 py-4 shadow-card text-sm text-slate-500 flex flex-col sm:flex-row sm:justify-between items-center gap-2">
-        <div>
-            &copy; 2025 <span class="font-semibold text-blue-900">ULBIParkir</span>. Semua hak cipta dilindungi.
-        </div>
-    
-    </footer>
+<footer
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mt-6 bg-gradient-to-br from-white to-blue-100 border border-blue-100 rounded-t-[18px] px-6 py-4 shadow-card text-sm text-slate-500 flex flex-col sm:flex-row sm:justify-between items-center gap-2">
+    <div>
+        &copy; 2025 <span class="font-semibold text-blue-900">ULBIParkir</span>. Semua hak cipta dilindungi.
+    </div>
+
+</footer>
         <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 
 </body>

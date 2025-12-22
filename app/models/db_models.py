@@ -1,3 +1,4 @@
+from datetime import datetime
 from mongoengine import (
     Document,
     StringField,
@@ -5,11 +6,7 @@ from mongoengine import (
     DateTimeField,
     ReferenceField,
 )
-from mongoengine import Document, StringField, EmailField, DateTimeField, ReferenceField
-from datetime import datetime
 
-from mongoengine import Document, StringField, DateTimeField, ReferenceField
-from datetime import datetime
 
 class User(Document):
     username = StringField(required=True, unique=True)
@@ -19,7 +16,8 @@ class User(Document):
 
 
 class ParkirLog(Document):
-    user = ReferenceField(User, required=True)
-    waktu_masuk = DateTimeField(default=datetime.utcnow)
-    waktu_keluar = DateTimeField()       # boleh kosong
-    status = StringField(default="masuk")  # "masuk" / "keluar"
+    npm = StringField(required=True)  # dari QR
+    nama = StringField()  # dari QR
+    waktu_masuk = DateTimeField()
+    waktu_keluar = DateTimeField()
+    status = StringField(choices=("masuk", "keluar"), required=True)
