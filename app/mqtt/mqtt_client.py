@@ -24,37 +24,94 @@ def start_mqtt(app):
             payload = msg.payload.decode().strip()
             print("📥 MQTT MASUK:", payload)
 
-            # ESP baru nyala
+            # ======================
+            # STATUS ESP (JANGAN MASUK DB)
+            # ======================
             if payload == "READY":
                 print("🟢 ESP ONLINE & READY")
-                socketio.emit("esp_status", {"status": "READY"})
+                socketio.emit("qr_status", {"status": "READY"})
+                return
+
+            # ======================
+            # ABAIKAN COMMAND ESP
+            # ======================
+            if payload.startswith(("LED", "BUZZER")):
+                print("ℹ️ Command ESP diabaikan:", payload)
                 return
 
             # Abaikan echo backend
             if payload in ("VALID", "INVALID"):
                 return
 
-            # QR valid
+            # ======================
+            # HANYA TERIMA QR
+            # ======================
             if not payload.startswith("QR:"):
                 return
 
+            # ======================
+            # PARSING QR
+            # ======================
             qr = payload[3:]
+            qr_clean = qr.strip("{}")
+            parts = qr_clean.split("|")
 
-            ok, aksi, stats = ParkirModel.process_scan(qr)
-            status = "VALID" if aksi == "masuk" else "INVALID"
+            if len(parts) != 3:
+                socketio.emit("qr_status", {"status": "INVALID"})
+                return
 
-            client.publish("ulbiparkir/gate/qr", status)
-            print("📤 RESPON KE ESP:", status)
+            nomor, npm, nama = parts
 
-            socketio.emit("qr_update", {
-                "waktu": datetime.now().strftime("%H:%M"),
+            # ======================
+            # VALIDASI FORMAT QR
+            # ======================
+            is_valid = ParkirModel.validate_user(npm, nama)
+            status = "VALID" if is_valid else "INVALID"
+
+            client.publish(MQTT_TOPIC, status)
+
+            socketio.emit("qr_status", {
                 "status": status,
-                "npm": qr,
-                "nama": stats.get("nama", "-"),
-                "durasi": "—"
+                "npm": npm,
+                "nama": nama,
             })
 
-        socketio.emit("stats_update", stats)
+            if not is_valid:
+                return
+
+            # ======================
+        # PROSES PARKIR (MASUK / KELUAR)
+        # ======================
+        ok, aksi, result = ParkirModel.process_scan(
+            nomor=nomor,
+            npm=npm,
+            nama=nama
+        )
+
+        if not ok:
+            return
+
+        # Ambil durasi dari hasil process_scan
+        durasi = result.get("durasi", "—")
+
+        # ======================
+        # KIRIM KE DASHBOARD
+        # ======================
+        socketio.emit(
+            "qr_update",
+            {
+                "waktu": datetime.now().strftime("%H:%M"),
+                "status": aksi,        # MASUK / KELUAR
+                "npm": npm,
+                "nama": nama,
+                "durasi": durasi,
+            },
+        )
+
+        # ======================
+        # UPDATE STATISTIK
+        # ======================
+        socketio.emit("stats_update", result)
 
     # ================= REGISTER =================
     client.on_connect = on_connect

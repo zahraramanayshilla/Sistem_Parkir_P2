@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, jsonify, render_template, request, redirect, url_for, flash, session
 from functools import wraps
 from werkzeug.security import generate_password_hash
-from app.models.db_models import User
+from app.models.db_models import ParkirLog, User
 from app.models.parkir_model import ParkirModel
 
 dashboard_bp = Blueprint("dashboard", __name__, url_prefix="")
@@ -123,7 +123,6 @@ def logout():
 @login_required
 def index():
     # data awal (sekali saja, pakai Jinja)
-    from app.models.db_models import ParkirLog
 
     logs = ParkirLog.objects.order_by("-waktu_masuk")[:20]
     return render_template("index.html", logs=logs)
@@ -291,3 +290,29 @@ def delete_user(user_id):
     user.delete()
     flash("User berhasil dihapus!", "success")
     return redirect(url_for("dashboard.profile"))
+
+
+@dashboard_bp.route("/api/riwayat-parkir")
+@login_required
+def api_riwayat_parkir():
+    logs = ParkirLog.objects().order_by("-waktu_masuk")
+
+    data = []
+    for log in logs:
+        durasi = "—"
+        if log.waktu_masuk and log.waktu_keluar:
+            delta = log.waktu_keluar - log.waktu_masuk
+            menit = int(delta.total_seconds() // 60)
+            durasi = f"{menit}m"
+
+        data.append(
+            {
+                "waktu": log.waktu_masuk.strftime("%H:%M") if log.waktu_masuk else "-",
+                "status": log.status.upper(),  # MASUK / KELUAR
+                "npm": log.npm,
+                "nama": log.nama,
+                "durasi": durasi,
+            }
+        )
+
+    return jsonify(data)

@@ -16,6 +16,7 @@ class User(Document):
 
 
 class ParkirLog(Document):
+    nomor = StringField()
     npm = StringField(required=True)  # dari QR
     nama = StringField()  # dari QR
     waktu_masuk = DateTimeField()

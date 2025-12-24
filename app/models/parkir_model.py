@@ -65,21 +65,26 @@ class ParkirModel:
     # LOGIKA SCAN QR DARI ESP32
     # ==================================================
     @staticmethod
-    def process_scan(kode: str, nama: str = "-"):
+    def process_scan(nomor: str, npm: str, nama: str):
         """
-        Dipanggil dari mqtt_client.py saat QR discan ESP32
+        Logika FINAL scan parkir:
+        - Scan pertama  -> MASUK
+        - Scan kedua    -> KELUAR + hitung durasi
+        - Anti double scan aktif
         """
 
-        kode = (kode or "").strip()
-        if not kode:
-            return False, "Kode QR kosong", None
+        npm = (npm or "").strip()
+        nama = (nama or "-").strip()
+
+        if not npm:
+            return False, "NPM kosong", None
 
         now = datetime.utcnow()
 
         # ==========================
-        # AMBIL LOG TERAKHIR (PERBAIKAN DI SINI)
+        # LOG TERAKHIR BERDASARKAN NPM
         # ==========================
-        last_log = ParkirLog.objects(npm=kode).order_by("-waktu_masuk").first()
+        last_log = ParkirLog.objects(npm=npm).order_by("-waktu_masuk").first()
 
         # ==========================
         # ANTI DOUBLE SCAN
@@ -91,30 +96,56 @@ class ParkirModel:
                 if delta < ParkirModel.SCAN_COOLDOWN:
                     return (
                         False,
-                        "Scan terlalu cepat",
+                        "SCAN_TOO_FAST",
                         ParkirModel.get_dashboard_stats(),
                     )
 
         # ==========================
-        # KELUAR
+        # SCAN PERTAMA → MASUK
         # ==========================
-        if last_log and last_log.status == "masuk" and not last_log.waktu_keluar:
-            last_log.waktu_keluar = now
-            last_log.status = "keluar"
-            last_log.save()
-            aksi = "keluar"
+        if not last_log or last_log.status == "keluar":
+            ParkirLog(
+                nomor=nomor,
+                npm=npm,
+                nama=nama,
+                waktu_masuk=now,
+                status="masuk",
+            ).save()
+
+            stats = ParkirModel.get_dashboard_stats()
+            return (
+                True,
+                "MASUK",
+                {
+                    **stats,
+                    "durasi": "—",
+                },
+            )
 
         # ==========================
-        # MASUK
+        # SCAN KEDUA → KELUAR
         # ==========================
-        else:
-            ParkirLog(
-                npm=kode, nama=nama, waktu_masuk=now, status="masuk"  # ⬅️ PERBAIKAN
-            ).save()
-            aksi = "masuk"
+        last_log.waktu_keluar = now
+        last_log.status = "keluar"
+        last_log.save()
+
+        # Hitung durasi
+        durasi_detik = int((now - last_log.waktu_masuk).total_seconds())
+        jam = durasi_detik // 3600
+        menit = (durasi_detik % 3600) // 60
+        durasi_str = f"{jam}j {menit}m" if jam else f"{menit}m"
 
         stats = ParkirModel.get_dashboard_stats()
-        return True, aksi, stats
+
+        return (
+            True,
+            "KELUAR",
+            {
+                **stats,
+                "durasi": durasi_str,
+                "durasi_detik": durasi_detik,
+            },
+        )
 
     # ==================================================
     # STATISTIK DASHBOARD (TANPA SLOT)
@@ -159,6 +190,17 @@ class ParkirModel:
             "rata_rata_str": rata_rata_str,
             "avg_detik": avg_detik,
         }
+
+    # ============================
+    # VALIDASI QR (UNTUK MQTT)
+    # ============================
+    @staticmethod
+    def validate_user(npm: str, nama: str) -> bool:
+        if not npm:
+            return False
+        if not npm.isdigit():   # NPM harus angka
+            return False
+        return True
 
 
 # ==================================================
