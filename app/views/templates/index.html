@@ -66,7 +66,6 @@
               </a>
             </li>
 
-            <!-- Notifikasi dummy -->
             <!-- Notifikasi -->
             <div class="relative">
               <button id="notifBtn"
@@ -112,103 +111,76 @@
     </header>
 
     <main class="mt-4 grid gap-4">
-      <!-- ============== DASHBOARD ============== -->
       <section class="space-y-6">
-
         <!-- ================= STATISTICS ================= -->
         <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
 
-          <!-- Total Slot -->
+          <!-- Total Scan -->
           <article
             class="bg-gradient-to-b from-white to-blue-400/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
-
             <p class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">
-              Total Slot Parkir
+              Total Scan Hari Ini
             </p>
-
-            <p class="text-[clamp(28px,4vw,36px)] font-extrabold text-blue-900">
-              250
-            </p>
-
-            
-
+            <p id="total-scan" class="text-[clamp(28px,4vw,36px)] font-extrabold text-blue-900">0</p>
           </article>
 
-          <!-- Tersedia -->
+          <!-- Masuk -->
           <article
             class="bg-gradient-to-b from-white to-green-400/30 border border-green-100 rounded-[18px] p-5 shadow-card">
             <p class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">
-              Slot Tersedia
+              Kendaraan Masuk
             </p>
-            <p class="text-[clamp(28px,4vw,36px)] font-extrabold text-green-700">
-              178
-            </p>
-            <div
-              class="inline-flex items-center gap-2 mt-2 px-3 py-1.5 rounded-full text-xs font-bold bg-green-50 text-green-700 border border-green-200">
-              <span class="w-2.5 h-2.5 rounded-full bg-green-600 ring-4 ring-green-500/20"></span>
-              Ketersediaan Tinggi
-            </div>
+            <p id="scan-masuk" class="text-[clamp(28px,4vw,36px)] font-extrabold text-green-700">0</p>
           </article>
 
-          <!-- Terpakai -->
+          <!-- Keluar -->
           <article
             class="bg-gradient-to-b from-white to-orange-400/30 border border-orange-100 rounded-[18px] p-5 shadow-card">
             <p class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">
-              Slot Terpakai
+              Kendaraan Keluar
             </p>
-            <p class="text-[clamp(28px,4vw,36px)] font-extrabold text-orange-700">
-              72
-            </p>
-            <p class="text-slate-500 text-sm">
-              Update terakhir ±1 menit
-            </p>
+            <p id="scan-keluar" class="text-[clamp(28px,4vw,36px)] font-extrabold text-orange-700">0</p>
           </article>
 
-          <!-- Durasi -->
+          <!-- Invalid -->
           <article
-            class="bg-gradient-to-b from-white to-indigo-400/30 border border-indigo-100 rounded-[18px] p-5 shadow-card">
+            class="bg-gradient-to-b from-white to-red-400/30 border border-red-100 rounded-[18px] p-5 shadow-card">
             <p class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-1">
-              Rata-rata Durasi
+              Scan Ditolak
             </p>
-            <p class="text-[clamp(28px,4vw,36px)] font-extrabold text-indigo-700">
-              1j 42m
-            </p>
-            <p class="text-slate-500 text-sm">
-              Kendaraan hari ini
-            </p>
+            <p id="scan-invalid" class="text-[clamp(28px,4vw,36px)] font-extrabold text-red-700">0</p>
           </article>
 
         </div>
-
 
         <!-- ================= LOG + RIWAYAT ================= -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-      <!-- ===== LOG AKTIVITAS (KIRI – KECIL) ===== -->
-      <article class="bg-white p-4 rounded-xl shadow lg:col-span-1 h-fit">
-      
-        <div class="flex justify-between items-start mb-3">
-          <div>
-            <h3 class="font-bold text-sm text-gray-700">Log Aktivitas</h3>
-      
-            <!-- STATUS SISTEM (DARI SOCKET.IO) -->
-            <p id="system-status" class="mt-1 text-sm font-semibold text-slate-500 flex items-center gap-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-gray-400"></span>
-              Menunggu perangkat…
-            </p>
-          </div>
-      
-          <button class="text-blue-600 text-xs hover:underline">
-            Semua
-          </button>
-        </div>
-      
-        <!-- LOG REALTIME MASUK DI SINI -->
-        <div id="activity-log" class="space-y-4 text-sm">
-          <!-- diisi JS -->
-        </div>
-      
-      </article>
+          <!-- ===== LOG AKTIVITAS (KIRI – KECIL) ===== -->
+          <article class="bg-white p-4 rounded-xl shadow lg:col-span-1 h-fit">
+
+            <div class="flex justify-between items-start mb-3">
+              <div>
+                <h3 class="font-bold text-sm text-gray-700">Log Aktivitas</h3>
+
+                <!-- STATUS SISTEM (DARI SOCKET.IO) -->
+                <p id="system-status" class="mt-1 text-sm font-semibold text-slate-500 flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-gray-400"></span>
+                  Menunggu perangkat…
+                </p>
+              </div>
+
+              <button class="text-blue-600 text-xs hover:underline">
+                Semua
+              </button>
+            </div>
+
+            <!-- LOG REALTIME MASUK DI SINI -->
+            <div id="activity-log" class="space-y-4 text-sm">
+              <!-- diisi JS -->
+            </div>
+
+          </article>
 
 
           <!-- ===== TABEL RIWAYAT (KANAN – BESAR) ===== -->

@@ -5,6 +5,33 @@ const socket = io();
 const tbody = document.getElementById("riwayat-body");
 
 // =====================================================
+// STATE STATISTIK (FRONTEND — MENETAP)
+// =====================================================
+const scanState = {
+    total: 0,
+    masuk: 0,
+    keluar: 0,
+    invalid: 0
+};
+
+// =====================================================
+// HELPER RENDER STATISTIK
+// =====================================================
+function renderScanStats() {
+    const total = document.getElementById("total-scan");
+    const masuk = document.getElementById("scan-masuk");
+    const keluar = document.getElementById("scan-keluar");
+    const invalid = document.getElementById("scan-invalid");
+
+    if (!total) return;
+
+    total.textContent = scanState.total;
+    masuk.textContent = scanState.masuk;
+    keluar.textContent = scanState.keluar;
+    invalid.textContent = scanState.invalid;
+}
+
+// =====================================================
 // LOAD DATA AWAL DARI MONGODB (PERSISTEN)
 // =====================================================
 if (tbody) {
@@ -63,25 +90,22 @@ socket.on("qr_update", (data) => {
 });
 
 // =====================================================
-// STATISTIK DASHBOARD (REALTIME)
+// STATISTIK DASHBOARD (DARI BACKEND — AUTHORITATIVE)
 // =====================================================
-socket.on("stats_update", (stats) => {
-    const terpakaiEl = document.getElementById("slot-terpakai");
-    const tersediaEl = document.getElementById("slot-tersedia");
-    const rataEl = document.getElementById("rata-rata");
+socket.on("parkir_stats", data => {
+    scanState.total = data.total_scan ?? scanState.total;
+    scanState.masuk = data.masuk ?? scanState.masuk;
+    scanState.keluar = data.keluar ?? scanState.keluar;
+    scanState.invalid = data.invalid ?? scanState.invalid;
 
-    if (terpakaiEl) terpakaiEl.innerText = stats.sedang_di_dalam ?? "-";
-    if (tersediaEl)
-        tersediaEl.innerText = 250 - (stats.sedang_di_dalam ?? 0);
-    if (rataEl) rataEl.innerText = stats.rata_rata_str ?? "—";
+    renderScanStats();
 });
 
 // =====================================================
-// STATUS SISTEM (READY / VALID / INVALID)
+// STATUS SISTEM + LOG AKTIVITAS
 // =====================================================
 const systemStatusEl = document.getElementById("system-status");
 const activityLogEl = document.getElementById("activity-log");
-
 
 function addActivityLog(iconBg, icon, title, desc, titleColor) {
     if (!activityLogEl) return;
@@ -106,63 +130,13 @@ function addActivityLog(iconBg, icon, title, desc, titleColor) {
 
     activityLogEl.prepend(div);
 
-    // batasi agar tidak numpuk
     if (activityLogEl.children.length > 6) {
         activityLogEl.removeChild(activityLogEl.lastChild);
     }
 }
 
-
-socket.on("qr_status", (data) => {
-    if (!systemStatusEl) return;
-
-    switch (data.status) {
-        case "READY":
-            systemStatusEl.innerHTML = `
-                <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                Perangkat siap digunakan
-            `;
-            addActivityLog(
-                "bg-blue-100",
-                "fa-solid fa-video",
-                "Kamera Aktif",
-                "ESP32 siap digunakan",
-                "text-blue-700"
-            );
-            break;
-
-        case "VALID":
-            systemStatusEl.innerHTML = `
-                <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
-                Akses diterima
-            `;
-            addActivityLog(
-                "bg-green-100",
-                "fa-solid fa-arrow-right-to-bracket",
-                "Motor Masuk",
-                data.nama,
-                "text-green-700"
-            );
-            break;
-
-        case "INVALID":
-            systemStatusEl.innerHTML = `
-                <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-                QR tidak valid
-            `;
-            addActivityLog(
-                "bg-red-100",
-                "fa-solid fa-triangle-exclamation",
-                "QR Tidak Valid",
-                "Scan ditolak",
-                "text-red-600"
-            );
-            break;
-    }
-});
-
 // =====================================================
-// DROPDOWN NOTIFIKASI (BELL)
+// DROPDOWN NOTIFIKASI
 // =====================================================
 const notifBtn = document.getElementById("notifBtn");
 const notifDropdown = document.getElementById("notifDropdown");
@@ -210,15 +184,106 @@ function addNotification(title, desc, color) {
 }
 
 // =====================================================
-// AUTO CLOSE DROPDOWN SAAT KLIK DI LUAR
+// EVENT STATUS QR (REALTIME)
+// =====================================================
+socket.on("qr_status", (data) => {
+    if (!systemStatusEl) return;
+
+    switch (data.status) {
+        case "READY":
+            systemStatusEl.innerHTML = `
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+              Perangkat siap digunakan
+            `;
+            addActivityLog(
+                "bg-blue-100",
+                "fa-solid fa-video",
+                "Kamera Aktif",
+                "ESP32 siap digunakan",
+                "text-blue-700"
+            );
+            addNotification("Perangkat siap", "Sistem siap digunakan", "text-blue-700");
+            break;
+
+        case "INVALID":
+            systemStatusEl.innerHTML = `
+              <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+              QR tidak valid
+            `;
+            addActivityLog(
+                "bg-red-100",
+                "fa-solid fa-triangle-exclamation",
+                "QR Tidak Valid",
+                "Scan ditolak",
+                "text-red-600"
+            );
+            addNotification("QR tidak valid", "Scan ditolak", "text-red-600");
+
+            // STATISTIK
+            scanState.total++;
+            scanState.invalid++;
+            renderScanStats();
+            break;
+
+        case "VALID":
+            scanState.total++;
+
+            if (data.aksi === "MASUK") {
+                scanState.masuk++;
+                systemStatusEl.innerHTML = `
+                  <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                  Kendaraan masuk
+                `;
+                addActivityLog(
+                    "bg-green-100",
+                    "fa-solid fa-arrow-right-to-bracket",
+                    "Motor Masuk",
+                    data.nama,
+                    "text-green-700"
+                );
+                addNotification("Motor Masuk", data.nama, "text-green-700");
+            }
+
+            if (data.aksi === "KELUAR") {
+                scanState.keluar++;
+                systemStatusEl.innerHTML = `
+                  <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+                  Kendaraan keluar
+                `;
+                addActivityLog(
+                    "bg-yellow-100",
+                    "fa-solid fa-arrow-right-from-bracket",
+                    "Motor Keluar",
+                    `${data.nama} • ${data.durasi}`,
+                    "text-yellow-700"
+                );
+                addNotification(
+                    "Motor Keluar",
+                    `${data.nama} • ${data.durasi}`,
+                    "text-yellow-700"
+                );
+            }
+
+            renderScanStats();
+            break;
+
+        case "TIMEOUT":
+            addNotification(
+                "QR tidak terbaca",
+                "Tidak ada QR terdeteksi selama 15 detik",
+                "text-orange-600"
+            );
+            break;
+    }
+});
+
+// =====================================================
+// AUTO CLOSE DROPDOWN
 // =====================================================
 document.addEventListener("click", (e) => {
     if (!notifBtn || !notifDropdown) return;
 
-    if (
-        !notifBtn.contains(e.target) &&
-        !notifDropdown.contains(e.target)
-    ) {
+    if (!notifBtn.contains(e.target) && !notifDropdown.contains(e.target)) {
         notifDropdown.classList.add("hidden");
     }
 });

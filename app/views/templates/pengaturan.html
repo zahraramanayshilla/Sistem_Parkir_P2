@@ -47,95 +47,95 @@
                 <!-- Checkbox Hidden -->
                 <input type="checkbox" id="menu-toggle" class="peer hidden">
 
-                    <!-- Navigasi -->
-                    <nav class="max-md:hidden peer-checked:max-md:block">
-                        <ul
-                            class="bg-blue-50 md:bg-transparent border md:border-none border-blue-100 rounded-xl md:rounded-full p-3 md:p-1 flex flex-col md:flex-row gap-2 md:gap-1 text-sm font-semibold">
-                    
-                            <!-- Dashboard: semua role -->
-                            <li>
-                                <a data-tab href="{{ url_for('dashboard.index') }}"
-                                    class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
-                                    <i class='bx bx-home-smile text-lg'></i>
-                                    <span>Dashboard</span>
-                                </a>
-                            </li>
-                    
-                            <!-- Hanya admin yang boleh lihat Riwayat -->
-                            {% if session.role == 'petugas','admin' %}
-                            <li>
-                                <a data-tab href="{{ url_for('dashboard.riwayat') }}"
-                                    class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
-                                    <i class='bx bx-time text-lg'></i>
-                                    <span>Riwayat</span>
-                                </a>
-                            </li>
-                            {% endif %}
-                    
-                    
-                            <!-- Profile: semua role -->
-                            <li>
-                                <a data-tab href="{{ url_for('dashboard.profile') }}"
-                                    class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
-                                    <i class='bx bx-user-circle text-lg'></i>
-                                    <span>Profile</span>
-                                </a>
-                            </li>
-                    
-                            <!-- Notifikasi dummy -->
-                            <!-- Notifikasi -->
-                            <div class="relative">
-                                <button id="notifBtn"
-                                    class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2 relative text-gray-600 hover:text-blue-600">
-                                    <i class='bx bxs-bell text-lg'></i>
-                                    <span
-                                        class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
-                                        3
-                                    </span>
-                                </button>
-                    
-                                <!-- DROPDOWN NOTIFIKASI -->
-                                <div id="notifDropdown"
-                                    class="hidden absolute right-0 mt-2 w-72 bg-white border border-blue-100 rounded-xl shadow-lg z-50">
-                    
-                                    <!-- Header -->
-                                    <div class="px-4 py-2 font-semibold text-blue-900 border-b">Notifikasi</div>
-                    
-                                    <!-- List Notifikasi -->
-                                    <ul class="max-h-60 overflow-y-auto" id="notifList">
-                                        <!-- Contoh notifikasi statis -->
-                                        <li class="px-4 py-3 border-b hover:bg-blue-50">
-                                            <div class="font-semibold text-green-700">Scan Berhasil</div>
-                                            <div class="text-xs text-gray-500">Mahasiswa: Andi (08:10)</div>
-                                        </li>
-                    
-                                        <li class="px-4 py-3 border-b hover:bg-blue-50">
-                                            <div class="font-semibold text-red-700">Scan Gagal</div>
-                                            <div class="text-xs text-gray-500">QR tidak valid (08:09)</div>
-                                        </li>
-                    
-                                        <li class="px-4 py-3 hover:bg-blue-50">
-                                            <div class="font-semibold text-blue-700">Kamera aktif</div>
-                                            <div class="text-xs text-gray-500">Monitoring dimulai (08:00)</div>
-                                        </li>
-                                    </ul>
-                                </div>
+                <!-- Navigasi -->
+                <nav class="max-md:hidden peer-checked:max-md:block">
+                    <ul
+                        class="bg-blue-50 md:bg-transparent border md:border-none border-blue-100 rounded-xl md:rounded-full p-3 md:p-1 flex flex-col md:flex-row gap-2 md:gap-1 text-sm font-semibold">
+
+                        <!-- Dashboard: semua role -->
+                        <li>
+                            <a data-tab href="{{ url_for('dashboard.index') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                <i class='bx bx-home-smile text-lg'></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+
+                        <!-- Hanya admin yang boleh lihat Riwayat -->
+                        {% if session.role == 'petugas','admin' %}
+                        <li>
+                            <a data-tab href="{{ url_for('dashboard.riwayat') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                <i class='bx bx-time text-lg'></i>
+                                <span>Riwayat</span>
+                            </a>
+                        </li>
+                        {% endif %}
+
+
+                        <!-- Profile: semua role -->
+                        <li>
+                            <a data-tab href="{{ url_for('dashboard.profile') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                <i class='bx bx-user-circle text-lg'></i>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+
+                        <!-- Notifikasi dummy -->
+                        <!-- Notifikasi -->
+                        <div class="relative">
+                            <button id="notifBtn"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2 relative text-gray-600 hover:text-blue-600">
+                                <i class='bx bxs-bell text-lg'></i>
+                                <span
+                                    class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                                    3
+                                </span>
+                            </button>
+
+                            <!-- DROPDOWN NOTIFIKASI -->
+                            <div id="notifDropdown"
+                                class="hidden absolute right-0 mt-2 w-72 bg-white border border-blue-100 rounded-xl shadow-lg z-50">
+
+                                <!-- Header -->
+                                <div class="px-4 py-2 font-semibold text-blue-900 border-b">Notifikasi</div>
+
+                                <!-- List Notifikasi -->
+                                <ul class="max-h-60 overflow-y-auto" id="notifList">
+                                    <!-- Contoh notifikasi statis -->
+                                    <li class="px-4 py-3 border-b hover:bg-blue-50">
+                                        <div class="font-semibold text-green-700">Scan Berhasil</div>
+                                        <div class="text-xs text-gray-500">Mahasiswa: Andi (08:10)</div>
+                                    </li>
+
+                                    <li class="px-4 py-3 border-b hover:bg-blue-50">
+                                        <div class="font-semibold text-red-700">Scan Gagal</div>
+                                        <div class="text-xs text-gray-500">QR tidak valid (08:09)</div>
+                                    </li>
+
+                                    <li class="px-4 py-3 hover:bg-blue-50">
+                                        <div class="font-semibold text-blue-700">Kamera aktif</div>
+                                        <div class="text-xs text-gray-500">Monitoring dimulai (08:00)</div>
+                                    </li>
+                                </ul>
                             </div>
-                    
-                    
-                            <!-- Pengaturan: hanya admin -->
-                            {% if session.role == 'admin' %}
-                            <li>
-                                <a data-tab href="{{ url_for('dashboard.pengaturan') }}"
-                                    class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
-                                    <i class='bx bx-cog text-lg'></i>
-                                    <span>Pengaturan</span>
-                                </a>
-                            </li>
-                            {% endif %}
-                    
-                        </ul>
-                    </nav>
+                        </div>
+
+
+                        <!-- Pengaturan: hanya admin -->
+                        {% if session.role == 'admin' %}
+                        <li>
+                            <a data-tab href="{{ url_for('dashboard.pengaturan') }}"
+                                class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2">
+                                <i class='bx bx-cog text-lg'></i>
+                                <span>Pengaturan</span>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+                </nav>
 
 
             </div>
@@ -144,143 +144,55 @@
 
         <main class="mt-4 grid gap-4">
 
-            <!-- ============== PENGATURAN ============== -->
-            <section >
-                <div class="grid gap-4 lg:grid-cols-2">
+            <!-- ===================== PANEL ADMIN (LAPORAN) ===================== -->
+            <section class="bg-white border border-blue-100 rounded-[18px] p-5 shadow-card">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-                    <!-- ===================== PENGATURAN SISTEM ===================== -->
-                    <article
-                        class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
-                        <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-3"
-                            id="pengaturan-title">
-                            Pengaturan Sistem
-                        </div>
+                    <div>
+                        <h2 class="text-sm font-bold uppercase tracking-wide text-slate-500">
+                            Laporan & Data Parkir
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">
+                            Ekspor dan kelola data parkir harian
+                        </p>
+                    </div>
 
-                        <div class="grid gap-3 md:grid-cols-2">
+                    <div class="flex flex-wrap gap-2">
 
-                            <!-- Jumlah Slot -->
-                            <label class="grid gap-2">
-                                <span class="text-[13px] font-bold text-blue-900">Jumlah Slot Total</span>
-                                <input type="number" placeholder="Mis. 250" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
-                            </label>
+                        <!-- Filter tanggal -->
+                        <input type="date" id="filterTanggal"
+                            class="px-3 py-2 rounded-xl border border-blue-200 text-sm">
 
-                            <!-- Zona Parkir -->
-                            <label class="grid gap-2">
-                                <span class="text-[13px] font-bold text-blue-900">Zona Parkir</span>
-                                <select class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                                    <option>Gedung A</option>
-                                    <option>Perpustakaan</option>
-                                    <option>Basement</option>
-                                    <option>Gerbang Timur</option>
-                                </select>
-                            </label>
+                        <!-- Export PDF -->
+                        <button id="btnExportPDF"
+                            class="bg-red-600 hover:bg-red-700 text-white text-xs px-4 py-2 rounded-xl flex items-center gap-2">
+                            <i class='bx bxs-file-pdf'></i>
+                            Export PDF
+                        </button>
 
-                            <!-- Mode Scan -->
-                            <label class="grid gap-2">
-                                <span class="text-[13px] font-bold text-blue-900">Mode Scan QR</span>
-                                <select class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                  focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                                    <option>Otomatis</option>
-                                    <option>Manual — Petugas Tekan untuk Scan</option>
-                                </select>
-                            </label>
+                        <!-- Export CSV -->
+                        <button id="btnExportCSV"
+                            class="bg-green-600 hover:bg-green-700 text-white text-xs px-4 py-2 rounded-xl flex items-center gap-2">
+                            <i class='bx bxs-file'></i>
+                            Export CSV
+                        </button>
 
-                            <!-- Durasi QR -->
-                            <label class="grid gap-2">
-                                <span class="text-[13px] font-bold text-blue-900">Durasi Berlaku QR (menit)</span>
-                                <input type="number" placeholder="Mis. 15" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                            </label>
-
-                            <!-- ID Perangkat ESP32 -->
-                            <label class="grid gap-2">
-                                <span class="text-[13px] font-bold text-blue-900">ID Perangkat ESP32</span>
-                                <input type="text" placeholder="Mis. ESP32-GATE-01" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                            </label>
-
-                            <!-- Notifikasi Sistem Lanjutan -->
-                            <label class="grid gap-2">
-                                <span class="text-[13px] font-bold text-blue-900">Notifikasi Sistem</span>
-                                <select class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                  focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                                    <option>Nonaktif</option>
-                                    <option>Slot Penuh</option>
-                                    <option>Perangkat Offline</option>
-                                    <option>Anomali Scan</option>
-                                </select>
-                            </label>
-
-                            <!-- Jam buka -->
-                            <label class="grid gap-2">
-                                <span class="text-[13px] font-bold text-blue-900">Jam Buka Parkir</span>
-                                <input type="time" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
-                            </label>
-
-                            <!-- Jam tutup -->
-                            <label class="grid gap-2">
-                                <span class="text-[13px] font-bold text-blue-900">Jam Tutup Parkir</span>
-                                <input type="time" class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200" />
-                            </label>
-
-                            <!-- Mode Emergency -->
-                            <label class="grid gap-2">
-                                <span class="text-[13px] font-bold text-blue-900">Mode Emergency</span>
-                                <select class="w-full px-3.5 py-3 rounded-xl border border-blue-200 bg-white shadow-inner 
-                  focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
-                                    <option>Nonaktif</option>
-                                    <option>Force Open Gate</option>
-                                    <option>Bypass QR</option>
-                                    <option>Mode Evakuasi</option>
-                                </select>
-                            </label>
-
-                            <!-- Backup Database -->
-                            <label class="grid gap-2 col-span-2">
-                                <span class="text-[13px] font-bold text-blue-900">Backup Database</span>
-                                <button type="button"
-                                    class="btn-secondary w-full text-left px-4 py-3 rounded-xl">Download Backup</button>
-                            </label>
-
-                        </div>
-
-                        <div class="mt-4 flex gap-2">
-                            <button type="button" class="btn-primary">Simpan Pengaturan</button>
-                            <a href="#dashboard" class="btn-secondary">Kembali</a>
-                        </div>
-                    </article>
-
-                    <!-- ===================== INFORMASI ===================== -->
-                    <article
-                        class="bg-gradient-to-b from-white to-blue-50/30 border border-blue-100 rounded-[18px] p-5 shadow-card">
-                        <div class="text-[13px] font-bold uppercase tracking-wide text-slate-500 mb-2">Informasi</div>
-                        <p class="text-slate-500">Informasi tentang sistem parkir kampus:</p>
-                        <ul class="text-slate-500 list-disc pl-5 mt-2 space-y-1">
-                            <li>Sistem terintegrasi dengan IoT ESP32 dan QR Code.</li>
-                            <li>Mendukung beberapa zona parkir kampus.</li>
-                            <li>Dilengkapi fitur keamanan & mode emergency.</li>
-                            <li>Dilengkapi notifikasi status perangkat & slot.</li>
-                            <li>Pengaturan dapat disesuaikan sesuai kebutuhan kampus.</li>
-                        </ul>
-                    </article>
-
+                    </div>
                 </div>
             </section>
+
+
 
         </main>
 
     </div>
-<footer
-    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mt-6 bg-gradient-to-br from-white to-blue-100 border border-blue-100 rounded-t-[18px] px-6 py-4 shadow-card text-sm text-slate-500 flex flex-col sm:flex-row sm:justify-between items-center gap-2">
-    <div>
-        &copy; 2025 <span class="font-semibold text-blue-900">ULBIParkir</span>. Semua hak cipta dilindungi.
-    </div>
+    <footer
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mt-6 bg-gradient-to-br from-white to-blue-100 border border-blue-100 rounded-t-[18px] px-6 py-4 shadow-card text-sm text-slate-500 flex flex-col sm:flex-row sm:justify-between items-center gap-2">
+        <div>
+            &copy; 2025 <span class="font-semibold text-blue-900">ULBIParkir</span>. Semua hak cipta dilindungi.
+        </div>
 
-</footer>
+    </footer>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 
