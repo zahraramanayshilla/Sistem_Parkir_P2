@@ -18,9 +18,9 @@
 
         <header
             class="sticky top-0 z-20 bg-gradient-to-br from-white to-blue-50 border border-blue-100 rounded-[18px] px-4 sm:px-6 py-3 shadow-card backdrop-blur-md saturate-125">
-        
+
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        
+
                 <!-- Brand -->
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
@@ -31,24 +31,25 @@
                             <h1 class="text-[clamp(18px,2.1vw,22px)] tracking-wide font-semibold">
                                 ULBIParkir • Sistem QR
                             </h1>
-                            <p class="text-xs text-slate-500 mt-0.5">Pengelolaan parkir kampus cepat, aman, terintegrasi.</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Pengelolaan parkir kampus cepat, aman,
+                                terintegrasi.</p>
                         </div>
                     </div>
-        
+
                     <!-- Tombol Burger (Checkbox Hack) -->
                     <label for="menu-toggle" class="md:hidden text-blue-900 text-3xl cursor-pointer">
                         <i class="bx bx-menu-alt-right"></i>
                     </label>
                 </div>
-        
+
                 <!-- Checkbox Hidden -->
                 <input type="checkbox" id="menu-toggle" class="peer hidden">
-        
+
                 <!-- Navigasi -->
                 <nav class="max-md:hidden peer-checked:max-md:block">
                     <ul
                         class="bg-blue-50 md:bg-transparent border md:border-none border-blue-100 rounded-xl md:rounded-full p-3 md:p-1 flex flex-col md:flex-row gap-2 md:gap-1 text-sm font-semibold">
-        
+
                         <!-- Dashboard: semua role -->
                         <li>
                             <a data-tab href="{{ url_for('dashboard.index') }}"
@@ -65,21 +66,20 @@
                                 <span>Profile</span>
                             </a>
                         </li>
-        
-                        <!-- Notifikasi dummy -->
+
                         <!-- Notifikasi -->
                         <div class="relative">
                             <button id="notifBtn"
                                 class="tab px-3.5 py-2 rounded-full text-blue-900/90 hover:bg-blue-500 hover:text-white transition flex items-center gap-2 relative">
                                 <i class="bx bxs-bell text-lg"></i>
-        
+
                                 <!-- Badge jumlah notifikasi -->
                                 <span id="notifCount"
                                     class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
                                     0
                                 </span>
                             </button>
-        
+
                             <!-- DROPDOWN NOTIFIKASI -->
                             <div id="notifDropdown"
                                 class="hidden absolute right-0 mt-2 w-72 bg-white border border-blue-100 rounded-xl shadow-lg z-50">
@@ -87,13 +87,13 @@
                                 <div class="px-4 py-2 font-semibold text-blue-900 border-b">
                                     Notifikasi
                                 </div>
-        
+
                                 <!-- List Notifikasi (diisi realtime.js) -->
                                 <ul class="max-h-60 overflow-y-auto" id="notifList"></ul>
                             </div>
                         </div>
-        
-        
+
+
                         <!-- Pengaturan: hanya admin -->
                         {% if session.role == 'admin' %}
                         <li>
@@ -104,10 +104,9 @@
                             </a>
                         </li>
                         {% endif %}
-        
+
                     </ul>
                 </nav>
-        
             </div>
         </header>
 
@@ -305,15 +304,16 @@
             </section>
         </main>
     </div>
-<footer
-    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mt-6 bg-gradient-to-br from-white to-blue-100 border border-blue-100 rounded-t-[18px] px-6 py-4 shadow-card text-sm text-slate-500 flex flex-col sm:flex-row sm:justify-between items-center gap-2">
-    <div>
-        &copy; 2025 <span class="font-semibold text-blue-900">ULBIParkir</span>. Semua hak cipta dilindungi.
-    </div>
+    <footer
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6  bg-gradient-to-br from-white to-blue-100 border border-blue-100 rounded-t-[18px] px-6 py-4 shadow-card text-sm text-slate-500 flex flex-col sm:flex-row sm:justify-between items-center gap-2">
+        <div>
+            &copy; 2025 <span class="font-semibold text-blue-900">ULBIParkir</span>. Semua hak cipta dilindungi.
+        </div>
 
-</footer>
-        <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-
+    </footer>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='js/realtime.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 
 </html>
